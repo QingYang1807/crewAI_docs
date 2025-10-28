@@ -1,87 +1,87 @@
-# 代理（Agents）
+# Agent（Agents）
 
-> 关于在 CrewAI 框架内创建和管理代理的详细指南。
+> 关于在 CrewAI 框架内创建和管理Agent的详细指南。
 
-## 代理概述
+## Agent概述
 
 在 CrewAI 框架中，`Agent` 是一个可以自主执行以下操作的单元：
 
 * 执行特定任务
 * 根据其角色和目标做出决策
 * 使用工具完成目标
-* 与其他代理沟通和协作
+* 与其他Agent沟通和协作
 * 维护交互记忆
 * 在允许的情况下委托任务
 
 <Tip>
-  可以将代理视为具有特定技能、专业知识和责任的专门团队成员。例如，`Researcher`（研究员）代理可能擅长收集和分析信息，而`Writer`（作家）代理可能更擅长创建内容。
+  可以将Agent视为具有特定技能、专业知识和责任的专门Crew（团队）成员。例如， `Researcher`（研究员）Agent可能擅长收集和分析信息，而 `Writer`（作家）Agent可能更擅长创建内容。
 </Tip>
 
-<Note type="info" title="企业增强功能：可视化代理构建器">
-  CrewAI AMP 包含一个可视化代理构建器，无需编写代码即可简化代理的创建和配置。可视化设计您的代理并实时测试它们。
+<Note type="info" title="企业增强功能：可视化Agent构建器">
+  CrewAI AMP 包含一个可视化Agent构建器，无需编写代码即可简化Agent的创建和配置。可视化设计您的Agent并实时测试它们。
 
-  <img src="https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=c4f5428b111816273b3b53d9cef14fad" alt="可视化代理构建器截图" data-og-width="2654" width="2654" data-og-height="1710" height="1710" data-path="images/enterprise/crew-studio-interface.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=280&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=35ea9140f0b9e57da5f45adbc7e2f166 280w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=560&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=ae6f0c18ef3679b5466177710fbc4a94 560w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=840&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=6c3e2fe013ab4826da90c937a9855635 840w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=1100&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=7f1474dd7f983532dc910363b96f783a 1100w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=1650&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=f1a6d7e744e6862af5e72dce4deb0fd1 1650w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=2500&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=74aeb1ccd8e2c8f84d4247b8d0259737 2500w" />
+  <img src="https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=c4f5428b111816273b3b53d9cef14fad" alt="可视化Agent构建器截图" data-og-width="2654" width="2654" data-og-height="1710" height="1710" data-path="images/enterprise/crew-studio-interface.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=280&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=35ea9140f0b9e57da5f45adbc7e2f166 280w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=560&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=ae6f0c18ef3679b5466177710fbc4a94 560w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=840&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=6c3e2fe013ab4826da90c937a9855635 840w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=1100&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=7f1474dd7f983532dc910363b96f783a 1100w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=1650&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=f1a6d7e744e6862af5e72dce4deb0fd1 1650w, https://mintcdn.com/crewai/5SZbe87tsCWZY09V/images/enterprise/crew-studio-interface.png?w=2500&fit=max&auto=format&n=5SZbe87tsCWZY09V&q=85&s=74aeb1ccd8e2c8f84d4247b8d0259737 2500w" />
 
-  可视化代理构建器支持：
+  可视化Agent构建器支持：
 
-  * 通过基于表单的界面直观配置代理
+  * 通过基于表单的界面直观配置Agent
   * 实时测试和验证
-  * 包含预配置代理类型的模板库
-  * 轻松自定义代理属性和行为
+  * 包含预配置Agent类型的模板库
+  * 轻松自定义Agent属性和行为
 </Note>
 
-## 代理属性
+## Agent属性
 
 | 属性                               | 参数                   | 类型                                  | 描述                                                                                              |
 | :--------------------------------- | :--------------------- | :------------------------------------ | :------------------------------------------------------------------------------------------------ |
-| **角色（Role）**                   | `role`                 | `str`                                 | 定义代理在团队中的功能和专业知识。                                                                |
-| **目标（Goal）**                   | `goal`                 | `str`                                 | 指导代理决策的个体目标。                                                                          |
-| **背景故事（Backstory）**          | `backstory`            | `str`                                 | 为代理提供上下文和个性，丰富交互体验。                                                            |
-| **大语言模型（LLM）** *(可选)*     | `llm`                  | `Union[str, LLM, Any]`               | 为代理提供支持的语言模型。默认为 `OPENAI_MODEL_NAME` 中指定的模型或 "gpt-4"。                    |
-| **工具（Tools）** *(可选)*         | `tools`                | `List[BaseTool]`                      | 代理可用到的能力或功能。默认为空列表。                                                            |
-| **函数调用大语言模型** *(可选)*    | `function_calling_llm` | `Optional[Any]`                       | 用于工具调用的语言模型，如果指定则覆盖团队的大语言模型。                                          |
-| **最大迭代次数** *(可选)*          | `max_iter`             | `int`                                 | 代理在提供最佳答案前的最大迭代次数。默认为 20。                                                   |
+| **角色（Role）**                   | `role`                 | `str`                                 | 定义Agent在Crew（团队）中的功能和专业知识。                                                                |
+| **目标（Goal）**                   | `goal`                 | `str`                                 | 指导Agent决策的个体目标。                                                                          |
+| **背景故事（Backstory）**          | `backstory`            | `str`                                 | 为Agent提供上下文和个性，丰富交互体验。                                                            |
+| **大语言模型（LLM）** *(可选)*     | `llm`                  | `Union[str, LLM, Any]`               | 为Agent提供支持的语言模型。默认为 `OPENAI_MODEL_NAME` 中指定的模型或 "gpt-4"。                    |
+| **工具（Tools）** *(可选)*         | `tools`                | `List[BaseTool]`                      | Agent可用到的能力或功能。默认为空列表。                                                            |
+| **函数调用大语言模型** *(可选)*    | `function_calling_llm` | `Optional[Any]`                       | 用于工具调用的语言模型，如果指定则覆盖Crew（团队）的大语言模型。                                          |
+| **最大迭代次数** *(可选)*          | `max_iter`             | `int`                                 | Agent在提供最佳答案前的最大迭代次数。默认为 20。                                                   |
 | **最大每分钟请求数** *(可选)*      | `max_rpm`              | `Optional[int]`                       | 每分钟最大请求数，以避免达到速率限制。                                                            |
 | **最大执行时间** *(可选)*          | `max_execution_time`   | `Optional[int]`                       | 任务执行的最大时间（以秒为单位）。                                                                |
 | **详细输出** *(可选)*              | `verbose`              | `bool`                                | 启用详细的执行日志以便调试。默认为 False。                                                        |
-| **允许委托** *(可选)*              | `allow_delegation`     | `bool`                                | 允许代理将任务委托给其他代理。默认为 False。                                                      |
-| **步骤回调** *(可选)*              | `step_callback`        | `Optional[Any]`                       | 每个代理步骤后调用的函数，覆盖团队回调。                                                          |
+| **允许委托** *(可选)*              | `allow_delegation`     | `bool`                                | 允许Agent将任务委托给其他Agent。默认为 False。                                                      |
+| **步骤回调** *(可选)*              | `step_callback`        | `Optional[Any]`                       | 每个Agent步骤后调用的函数，覆盖Crew（团队）回调。                                                          |
 | **缓存** *(可选)*                  | `cache`                | `bool`                                | 启用工具使用的缓存。默认为 True。                                                                 |
-| **系统模板** *(可选)*              | `system_template`      | `Optional[str]`                       | 代理的自定义系统提示模板。                                                                        |
-| **提示模板** *(可选)*              | `prompt_template`      | `Optional[str]`                       | 代理的自定义提示模板。                                                                            |
-| **响应模板** *(可选)*              | `response_template`    | `Optional[str]`                       | 代理的自定义响应模板。                                                                            |
-| **允许代码执行** *(可选)*          | `allow_code_execution` | `Optional[bool]`                      | 启用代理的代码执行功能。默认为 False。                                                            |
+| **系统模板** *(可选)*              | `system_template`      | `Optional[str]`                       | Agent的自定义系统提示模板。                                                                        |
+| **提示模板** *(可选)*              | `prompt_template`      | `Optional[str]`                       | Agent的自定义提示模板。                                                                            |
+| **响应模板** *(可选)*              | `response_template`    | `Optional[str]`                       | Agent的自定义响应模板。                                                                            |
+| **允许代码执行** *(可选)*          | `allow_code_execution` | `Optional[bool]`                      | 启用Agent的代码执行功能。默认为 False。                                                            |
 | **最大重试限制** *(可选)*          | `max_retry_limit`      | `int`                                 | 发生错误时的最大重试次数。默认为 2。                                                              |
 | **遵守上下文窗口** *(可选)*        | `respect_context_window`| `bool`                                | 通过总结保持消息在上下文窗口大小内。默认为 True。                                                 |
 | **代码执行模式** *(可选)*          | `code_execution_mode`  | `Literal["safe", "unsafe"]`           | 代码执行模式：'safe'（使用 Docker）或 'unsafe'（直接执行）。默认为 'safe'。                      |
-| **多模态** *(可选)*                | `multimodal`           | `bool`                                | 代理是否支持多模态功能。默认为 False。                                                            |
+| **多模态** *(可选)*                | `multimodal`           | `bool`                                | Agent是否支持多模态功能。默认为 False。                                                            |
 | **注入日期** *(可选)*              | `inject_date`          | `bool`                                | 是否自动将当前日期注入任务中。默认为 False。                                                      |
 | **日期格式** *(可选)*              | `date_format`          | `str`                                 | 启用 inject\_date 时的日期格式字符串。默认为 "%Y-%m-%d"（ISO 格式）。                            |
-| **推理** *(可选)*                  | `reasoning`            | `bool`                                | 代理是否应该在执行任务前进行反思并创建计划。默认为 False。                                         |
+| **推理** *(可选)*                  | `reasoning`            | `bool`                                | Agent是否应该在执行任务前进行反思并创建计划。默认为 False。                                         |
 | **最大推理尝试次数** *(可选)*      | `max_reasoning_attempts`| `Optional[int]`                       | 执行任务前的最大推理尝试次数。如果为 None，则一直尝试直到准备就绪。                               |
-| **嵌入器** *(可选)*                | `embedder`             | `Optional[Dict[str, Any]]`            | 代理使用的嵌入器配置。                                                                            |
-| **知识源** *(可选)*                | `knowledge_sources`    | `Optional[List[BaseKnowledgeSource]]` | 代理可用的知识源。                                                                                |
+| **嵌入器** *(可选)*                | `embedder`             | `Optional[Dict[str, Any]]`            | Agent使用的嵌入器配置。                                                                            |
+| **知识源** *(可选)*                | `knowledge_sources`    | `Optional[List[BaseKnowledgeSource]]` | Agent可用的知识源。                                                                                |
 | **使用系统提示** *(可选)*          | `use_system_prompt`    | `Optional[bool]`                      | 是否使用系统提示（用于支持 o1 模型）。默认为 True。                                               |
 
-## 创建代理
+## 创建Agent
 
-在 CrewAI 中有两种创建代理的方式：使用 **YAML 配置（推荐）** 或 **直接在代码中定义**。
+在 CrewAI 中有两种创建Agent的方式：使用 **YAML 配置（推荐）** 或 **直接在代码中定义**。
 
 ### YAML 配置（推荐）
 
-使用 YAML 配置提供了一种更清晰、更易维护的方式来定义代理。我们强烈建议在 CrewAI 项目中使用这种方法。
+使用 YAML 配置提供了一种更清晰、更易维护的方式来定义Agent。我们强烈建议在 CrewAI 项目中使用这种方法。
 
-按照 [安装](/en/installation) 部分中的说明创建 CrewAI 项目后，导航到 `src/latest_ai_development/config/agents.yaml` 文件，并修改模板以满足您的需求。
+按照 [安装](/Get Started/Installation.md) 部分中的说明创建 CrewAI 项目后，导航到 `src/latest_ai_development/config/agents.yaml` 文件，并修改模板以满足您的需求。
 
 <Note>
-  YAML 文件中的变量（如 `{topic}`）将在运行团队时从您的输入值替换：
+  YAML 文件中的变量（如 `{topic}`）将在运行Crew（团队）时从您的输入值替换：
 
   ```python Code theme={null}
-  crew.kickoff(inputs={'topic': 'AI 代理'})
+  crew.kickoff(inputs={'topic': 'AI Agent'})
   ```
 </Note>
 
-以下是使用 YAML 配置代理的示例：
+以下是使用 YAML 配置Agent的示例：
 
 ```yaml agents.yaml theme={null}
 # src/latest_ai_development/config/agents.yaml
@@ -104,7 +104,7 @@ reporting_analyst:
     清晰简洁的报告而闻名，使他人能够轻松理解并基于你提供的信息采取行动。
 ```
 
-要在代码中使用此 YAML 配置，创建一个继承自 `CrewBase` 的团队类：
+要在代码中使用此 YAML 配置，创建一个继承自 `CrewBase` 的Crew（团队）类：
 
 ```python Code theme={null}
 # src/latest_ai_development/crew.py
@@ -114,7 +114,7 @@ from crewai_tools import SerperDevTool
 
 @CrewBase
 class LatestAiDevelopmentCrew():
-  """LatestAiDevelopment 团队"""
+  """LatestAiDevelopment Crew（团队）"""
 
   agents_config = "config/agents.yaml"
 
@@ -140,13 +140,13 @@ class LatestAiDevelopmentCrew():
 
 ### 直接代码定义
 
-您可以通过实例化 `Agent` 类直接在代码中创建代理。以下是显示所有可用参数的综合示例：
+您可以通过实例化 `Agent` 类直接在代码中创建Agent。以下是显示所有可用参数的综合示例：
 
 ```python Code theme={null}
 from crewai import Agent
 from crewai_tools import SerperDevTool
 
-# 使用所有可用参数创建代理
+# 使用所有可用参数创建Agent
 agent = Agent(
     role="高级数据科学家",
     goal="分析和解释复杂数据集以提供可行的见解",
@@ -155,20 +155,20 @@ agent = Agent(
     llm="gpt-4",  # 默认值：OPENAI_MODEL_NAME 或 "gpt-4"
     function_calling_llm=None,  # 可选：用于工具调用的独立大语言模型
     verbose=False,  # 默认值：False
-    allow_delegation=False,  # 默认值：False
+    allow_delegation=False,  # 是否允许委派任务给其他Agent，默认值：False
     max_iter=20,  # 默认值：20 次迭代
     max_rpm=None,  # 可选：API 调用的速率限制
     max_execution_time=None,  # 可选：最大执行时间（以秒为单位）
-    max_retry_limit=2,  # 默认值：错误时重试 2 次
-    allow_code_execution=False,  # 默认值：False
-    code_execution_mode="safe",  # 默认值："safe"（选项："safe"、"unsafe"）
-    respect_context_window=True,  # 默认值：True
-    use_system_prompt=True,  # 默认值：True
+    max_retry_limit=2,  # 发生错误时的最大重试次数。默认值：错误时重试 2 次
+    allow_code_execution=False,  # 启用代理的代码执行功能。默认值：False
+    code_execution_mode="safe",  # 代码执行模式：'safe'（使用 Docker）或 'unsafe'（直接执行）。"safe"（选项："safe"、"unsafe"）
+    respect_context_window=True,  # 通过总结保持消息在上下文窗口大小内。默认值：True
+    use_system_prompt=True,  # 是否使用系统提示。默认值：True
     multimodal=False,  # 默认值：False
     inject_date=False,  # 默认值：False
     date_format="%Y-%m-%d",  # 默认值：ISO 格式
-    reasoning=False,  # 默认值：False
-    max_reasoning_attempts=None,  # 默认值：None
+    reasoning=False,  # 代理是否应该在执行任务前进行反思并创建计划。默认值：False
+    max_reasoning_attempts=None,  # 执行任务前的最大推理尝试次数。如果为 None，则一直尝试直到准备就绪。默认值：None
     tools=[SerperDevTool()],  # 可选：工具列表
     knowledge_sources=None,  # 可选：知识源列表
     embedder=None,  # 可选：自定义嵌入器配置
@@ -181,7 +181,7 @@ agent = Agent(
 
 让我们分解一些常见用例的关键参数组合：
 
-#### 基础研究代理
+#### 基础研究Agent
 
 ```python Code theme={null}
 research_agent = Agent(
@@ -193,7 +193,7 @@ research_agent = Agent(
 )
 ```
 
-#### 代码开发代理
+#### 代码开发Agent
 
 ```python Code theme={null}
 dev_agent = Agent(
@@ -207,7 +207,7 @@ dev_agent = Agent(
 )
 ```
 
-#### 长时间运行的分析代理
+#### 长时间运行的分析Agent
 
 ```python Code theme={null}
 analysis_agent = Agent(
@@ -215,13 +215,13 @@ analysis_agent = Agent(
     goal="对大型数据集进行深度分析",
     backstory="专长于大数据分析和模式识别",
     memory=True,
-    respect_context_window=True,
+    respect_context_window=True, # 通过总结保持消息在上下文窗口大小内。默认为 True
     max_rpm=10,  # 限制 API 调用
     function_calling_llm="gpt-4o-mini"  # 使用更便宜的模型进行工具调用
 )
 ```
 
-#### 自定义模板代理
+#### 自定义模板Agent
 
 ```python Code theme={null}
 custom_agent = Agent(
@@ -237,7 +237,7 @@ custom_agent = Agent(
 )
 ```
 
-#### 具有日期感知和推理能力的代理
+#### 具有日期感知和推理能力的Agent
 
 ```python Code theme={null}
 strategic_agent = Agent(
@@ -252,7 +252,7 @@ strategic_agent = Agent(
 )
 ```
 
-#### 推理代理
+#### 推理Agent
 
 ```python Code theme={null}
 reasoning_agent = Agent(
@@ -266,7 +266,7 @@ reasoning_agent = Agent(
 )
 ```
 
-#### 多模态代理
+#### 多模态Agent
 
 ```python Code theme={null}
 multimodal_agent = Agent(
@@ -282,7 +282,7 @@ multimodal_agent = Agent(
 
 #### 关键参数
 
-* `role`、`goal` 和 `backstory` 是必需的，塑造代理的行为
+* `role`、`goal` 和 `backstory` 是必需的，塑造Agent的行为
 * `llm` 决定使用的语言模型（默认：OpenAI 的 GPT-4）
 
 #### 内存和上下文
@@ -307,20 +307,20 @@ multimodal_agent = Agent(
 
 <Note>
   这会运行默认的 Docker 镜像。如果你想配置 docker 镜像，请查看工具部分中的代码解释器工具。
-  将代码解释器工具作为工具参数添加到代理中。
+  将代码解释器工具作为工具参数添加到Agent中。
 </Note>
 
 #### 高级功能
 
 * `multimodal`：启用多模态功能以处理文本和视觉内容
-* `reasoning`：使代理能够在执行任务前进行反思和创建计划
+* `reasoning`：使Agent能够在执行任务前进行反思和创建计划
 * `inject_date`：自动将当前日期注入任务描述
 
 #### 模板
 
-* `system_template`：定义代理的核心行为
+* `system_template`：定义Agent的核心行为
 * `prompt_template`：结构化输入格式
-* `response_template`：格式化代理响应
+* `response_template`：格式化Agent响应
 
 <Note>
   使用自定义模板时，确保同时定义 `system_template` 和 `prompt_template`。`response_template` 是可选的，但建议使用以保持一致的输出格式。
@@ -330,14 +330,14 @@ multimodal_agent = Agent(
   使用自定义模板时，可以在模板中使用诸如 `{role}`、`{goal}` 和 `{backstory}` 之类的变量。这些将在执行期间自动填充。
 </Note>
 
-## 代理工具
+## Agent工具
 
-代理可以配备各种工具以增强其能力。CrewAI 支持来自以下来源的工具：
+Agent可以配备各种工具以增强其能力。CrewAI 支持来自以下来源的工具：
 
 * [CrewAI 工具包](https://github.com/joaomdmoura/crewai-tools)
 * [LangChain 工具](https://python.langchain.com/docs/integrations/tools)
 
-以下是如何向代理添加工具：
+以下是如何向Agent添加工具：
 
 ```python Code theme={null}
 from crewai import Agent
@@ -347,7 +347,7 @@ from crewai_tools import SerperDevTool, WikipediaTools
 search_tool = SerperDevTool()
 wiki_tool = WikipediaTools()
 
-# 向代理添加工具
+# 向Agent添加工具
 researcher = Agent(
     role="AI 技术研究员",
     goal="研究最新的 AI 发展",
@@ -356,9 +356,9 @@ researcher = Agent(
 )
 ```
 
-## 代理内存和上下文
+## Agent内存和上下文
 
-代理可以维护其交互的记忆，并使用先前任务的上下文。这对于需要在多个任务之间保留信息的复杂工作流特别有用。
+Agent可以维护其交互的记忆，并使用先前任务的上下文。这对于需要在多个任务之间保留信息的复杂工作流特别有用。
 
 ```python Code theme={null}
 from crewai import Agent
@@ -372,7 +372,7 @@ analyst = Agent(
 ```
 
 <Note>
-  当启用 `memory` 时，代理将在多次交互中维护上下文，提高其处理复杂、多步骤任务的能力。
+  当启用 `memory` 时，Agent将在多次交互中维护上下文，提高其处理复杂、多步骤任务的能力。
 </Note>
 
 ## 上下文窗口管理
@@ -381,7 +381,7 @@ CrewAI 包含复杂的自动上下文窗口管理，用于处理对话超出语�
 
 ### 上下文窗口管理如何工作
 
-当代理的对话历史对于 LLM 的上下文窗口来说过大时，CrewAI 会自动检测这种情况，并且可以：
+当Agent的对话历史对于 LLM 的上下文窗口来说过大时，CrewAI 会自动检测这种情况，并且可以：
 
 1. **自动总结内容**（当 `respect_context_window=True` 时）
 2. **停止执行并报错**（当 `respect_context_window=False` 时）
@@ -391,7 +391,7 @@ CrewAI 包含复杂的自动上下文窗口管理，用于处理对话超出语�
 这是大多数用例的**默认和推荐设置**。启用时，CrewAI 将：
 
 ```python Code theme={null}
-# 具有自动上下文管理的代理（默认）
+# 具有自动上下文管理的Agent（默认）
 smart_agent = Agent(
     role="研究分析师",
     goal="分析大型文档和数据集",
@@ -413,7 +413,7 @@ smart_agent = Agent(
 当你需要精确控制并希望执行停止而不是丢失任何信息时：
 
 ```python Code theme={null}
-# 具有严格上下文限制的代理
+# 具有严格上下文限制的Agent
 strict_agent = Agent(
     role="法律文档审查员",
     goal="提供精确的法律分析而不丢失信息",
@@ -547,19 +547,19 @@ agent = Agent(
   上下文窗口管理功能在后台自动工作。你不需要调用任何特殊函数 - 只需将 `respect_context_window` 设置为你偏好的行为，CrewAI 就会处理其余部分！
 </Note>
 
-## 使用 `kickoff()` 直接与代理交互
+## 使用 `kickoff()` 直接与Agent交互
 
-代理可以使用 `kickoff()` 方法直接使用，而无需通过任务或团队工作流。当你不需要完整的团队编排功能时，这提供了一种与代理交互的更简单方式。
+Agent可以使用 `kickoff()` 方法直接使用，而无需通过任务或Crew（团队）工作流。当你不需要完整的Crew（团队）编排功能时，这提供了一种与Agent交互的更简单方式。
 
 ### `kickoff()` 如何工作
 
-`kickoff()` 方法允许你直接向代理发送消息并获得响应，类似于与 LLM 交互的方式，但具有代理的所有能力（工具、推理等）。
+`kickoff()` 方法允许你直接向Agent发送消息并获得响应，类似于与 LLM 交互的方式，但具有Agent的所有能力（工具、推理等）。
 
 ```python Code theme={null}
 from crewai import Agent
 from crewai_tools import SerperDevTool
 
-# 创建代理
+# 创建Agent
 researcher = Agent(
     role="AI 技术研究员",
     goal="研究最新的 AI 发展",
@@ -567,7 +567,7 @@ researcher = Agent(
     verbose=True
 )
 
-# 使用 kickoff() 直接与代理交互
+# 使用 kickoff() 直接与Agent交互
 result = researcher.kickoff("语言模型的最新发展是什么？")
 
 # 访问原始响应
@@ -585,7 +585,7 @@ print(result.raw)
 
 * `raw`：包含原始输出文本的字符串
 * `pydantic`：解析的 Pydantic 模型（如果提供了 `response_format`）
-* `agent_role`：产生输出的代理的角色
+* `agent_role`：产生输出的Agent的角色
 * `usage_metrics`：执行的令牌使用指标
 
 ### 结构化输出
@@ -641,7 +641,7 @@ asyncio.run(main())
 ```
 
 <Note>
-  `kickoff()` 方法在内部使用 `LiteAgent`，它提供了更简单的执行流程，同时保留了代理的所有配置（角色、目标、背景故事、工具等）。
+  `kickoff()` 方法在内部使用 `LiteAgent`，它提供了更简单的执行流程，同时保留了Agent的所有配置（角色、目标、背景故事、工具等）。
 </Note>
 
 ## 重要考虑因素和最佳实践
@@ -663,27 +663,27 @@ asyncio.run(main())
 
 * 利用 `knowledge_sources` 获取特定领域的信息
 * 使用自定义嵌入模型时配置 `embedder`
-* 使用自定义模板（`system_template`、`prompt_template`、`response_template`）对代理行为进行细粒度控制
+* 使用自定义模板（`system_template`、`prompt_template`、`response_template`）对Agent行为进行细粒度控制
 
 ### 高级功能
 
-* 对于需要计划和反思复杂任务的代理，启用 `reasoning: true`
+* 对于需要计划和反思复杂任务的Agent，启用 `reasoning: true`
 * 设置适当的 `max_reasoning_attempts` 以控制规划迭代次数（None 表示无限尝试）
-* 对于时间敏感任务，使用 `inject_date: true` 为代理提供当前日期感知
+* 对于时间敏感任务，使用 `inject_date: true` 为Agent提供当前日期感知
 * 使用标准的 Python 日期时间格式代码通过 `date_format` 自定义日期格式
-* 对于需要处理文本和视觉内容的代理，启用 `multimodal: true`
+* 对于需要处理文本和视觉内容的Agent，启用 `multimodal: true`
 
-### 代理协作
+### Agent协作
 
-* 当代理需要协同工作时，启用 `allow_delegation: true`
-* 使用 `step_callback` 监控和记录代理交互
+* 当Agent需要协同工作时，启用 `allow_delegation: true`
+* 使用 `step_callback` 监控和记录Agent交互
 * 考虑为不同的目的使用不同的 LLM：
   * 用于复杂推理的主要 `llm`
   * 用于高效工具使用的 `function_calling_llm`
 
 ### 日期感知和推理
 
-* 对于时间敏感任务，使用 `inject_date: true` 为代理提供当前日期感知
+* 对于时间敏感任务，使用 `inject_date: true` 为Agent提供当前日期感知
 * 使用标准的 Python 日期时间格式代码通过 `date_format` 自定义日期格式
 * 有效的格式代码包括：%Y（年）、%m（月）、%d（日）、%B（完整月份名称）等
 * 无效的日期格式将记录为警告，并且不会修改任务描述
@@ -704,15 +704,15 @@ asyncio.run(main())
 2. **上下文窗口错误**：如果你超过上下文限制：
    * 启用 `respect_context_window`
    * 使用更高效的提示
-   * 定期清除代理内存
+   * 定期清除Agent内存
 
 3. **代码执行问题**：如果代码执行失败：
    * 验证安全模式是否安装了 Docker
    * 检查执行权限
    * 审查代码沙箱设置
 
-4. **内存问题**：如果代理响应看起来不一致：
+4. **内存问题**：如果Agent响应看起来不一致：
    * 检查知识源配置
    * 审查对话历史管理
 
-请记住，代理在根据其特定用例配置时最有效。花时间了解你的需求并相应调整这些参数。
+请记住，Agent在根据其特定用例配置时最有效。花时间了解你的需求并相应调整这些参数。
