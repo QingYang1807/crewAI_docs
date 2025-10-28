@@ -12,7 +12,7 @@
 | :--- | :--- | :--- | :--- |
 | **任务** | `tasks` | 分配给Crew（团队）的任务列表。 | |
 | **Agent** | `agents` | 属于该Crew（团队）的Agent列表。 | |
-| **流程** *(可选)* | `process` | Crew（团队）遵循的流程(如顺序、层级)。默认为`sequential`(顺序)。 | |
+| **流程** *(可选)* | `process` | Crew（团队）遵循的流程(如顺序sequential、层级hierarchical)。默认为`sequential`(顺序)。 | |
 | **详细输出** *(可选)* | `verbose` | 执行期间日志的详细级别。默认为`False`。 | |
 | **管理器LLM** *(可选)* | `manager_llm` | 在层级流程中，管理器Agent使用的语言模型。**使用层级流程时必需。** | |
 | **函数调用LLM** *(可选)* | `function_calling_llm` | 如果传递此参数，Crew（团队）将使用此LLM为Crew（团队）中所有Agent的工具执行函数调用。每个Agent可以有自己的LLM，这会覆盖Crew（团队）的函数调用LLM。 | |
@@ -23,7 +23,7 @@
 | **嵌入器** *(可选)* | `embedder` | Crew（团队）要使用的嵌入器的配置。目前主要由记忆功能使用。默认为`{"provider": "openai"}`。 | |
 | **步骤回调** *(可选)* | `step_callback` | 在每个Agent的每个步骤之后调用的函数。这可用于记录Agent的操作或执行其他操作；它不会覆盖Agent特定的`step_callback`。 | |
 | **任务回调** *(可选)* | `task_callback` | 在每个任务完成后调用的函数。用于监控或任务执行后的额外操作。 | |
-| **共享Crew（团队）** *(可选)* | `share_crew` | 是否希望将完整的Crew（团队）信息和执行与crewAICrew（团队）共享，以改进库，并允许我们训练模型。 | |
+| **共享Crew（团队）** *(可选)* | `share_crew` | 是否希望将完整的Crew（团队）信息和执行与 crewAI 团队共享，以改进库，并允许我们训练模型。 | |
 | **输出日志文件** *(可选)* | `output_log_file` | 设置为True以在当前目录中将日志保存为logs.txt，或提供文件路径。如果文件名以.json结尾，日志将为JSON格式，否则为.txt格式。默认为`None`。 | |
 | **管理器Agent** *(可选)* | `manager_agent` | `manager`设置将用作管理器的自定义Agent。 | |
 | **提示文件** *(可选)* | `prompt_file` | 用于Crew（团队）的提示JSON文件的路径。 | |
@@ -70,7 +70,7 @@ class YourCrewName:
     @before_kickoff
     def prepare_inputs(self, inputs):
         # 在Crew（团队）启动前修改输入
-        inputs['additional_data'] =一些额外信息"
+        inputs['additional_data'] = "一些额外信息"
         return inputs
 
     @after_kickoff
