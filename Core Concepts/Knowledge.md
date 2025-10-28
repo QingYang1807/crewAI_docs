@@ -4,24 +4,21 @@
 
 ## 概述
 
-CrewAI中的知识库是一个强大的系统，允许AI代理在执行任务期间访问和利用外部信息源。
-可以将其视为为代理提供一个可供工作时查阅的参考图书馆。
+CrewAI中的知识库是一个强大的系统，允许AIAgent在执行任务期间访问和利用外部信息源。
+可以将其视为为Agent提供一个可供工作时查阅的参考图书馆。
 
-<Info>
-  使用知识库的主要优势：
-
-  * 通过特定领域的信息增强代理能力
-  * 通过真实数据支持决策
-  * 在对话中保持上下文连贯
-  * 将回答基于事实信息
-</Info>
+使用知识库的主要优势：
+* 通过特定领域的信息增强Agent能力
+* 通过真实数据支持决策
+* 在对话中保持上下文连贯
+* 将回答基于事实信息
 
 ## 快速入门示例
 
-<Tip>
-  对于基于文件的知识源，请确保将文件放在项目根目录下的`knowledge`文件夹中。
-  创建源时，使用相对于`knowledge`目录的路径。
-</Tip>
+
+对于基于文件的知识源，请确保将文件放在项目根目录下的`knowledge`文件夹中。
+创建源时，使用相对于`knowledge`目录的路径。
+
 
 ### 向量存储（RAG）客户端配置
 
@@ -32,7 +29,7 @@ CrewAI 提供了一个与提供商无关的向量存储 RAG 客户端抽象。�
 * ChromaDB（默认）
 * Qdrant
 
-```python 主题={null}
+```python
 from crewai.rag.config.utils import set_rag_config, get_rag_client, clear_rag_config
 
 # ChromaDB（默认）
@@ -61,7 +58,7 @@ clear_rag_config()  # 可选重置
 
 ### 基本字符串知识示例
 
-```python 主题={null}
+```python
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
@@ -105,7 +102,7 @@ result = crew.kickoff(inputs={"question": "John 住在哪个城市，他多大�
   要使以下示例工作，您需要安装 `docling`：`uv add docling`
 </Note>
 
-```python 主题={null}
+```python
 from crewai import LLM, Agent, Crew, Process, Task
 from crewai.knowledge.source.crew_docling_source import CrewDoclingSource
 
@@ -169,7 +166,7 @@ CrewAI 开箱即用地支持各种类型的知识源：
 
 ### 文本文件知识源
 
-```python  主题={null}
+```python 
 from crewai.knowledge.source.text_file_knowledge_source import TextFileKnowledgeSource
 
 text_source = TextFileKnowledgeSource(
@@ -179,7 +176,7 @@ text_source = TextFileKnowledgeSource(
 
 ### PDF 知识源
 
-```python  主题={null}
+```python 
 from crewai.knowledge.source.pdf_knowledge_source import PDFKnowledgeSource
 
 pdf_source = PDFKnowledgeSource(
@@ -189,7 +186,7 @@ pdf_source = PDFKnowledgeSource(
 
 ### CSV 知识源
 
-```python  主题={null}
+```python 
 from crewai.knowledge.source.csv_knowledge_source import CSVKnowledgeSource
 
 csv_source = CSVKnowledgeSource(
@@ -199,7 +196,7 @@ csv_source = CSVKnowledgeSource(
 
 ### Excel 知识源
 
-```python  主题={null}
+```python 
 from crewai.knowledge.source.excel_knowledge_source import ExcelKnowledgeSource
 
 excel_source = ExcelKnowledgeSource(
@@ -209,7 +206,7 @@ excel_source = ExcelKnowledgeSource(
 
 ### JSON 知识源
 
-```python  主题={null}
+```python 
 from crewai.knowledge.source.json_knowledge_source import JSONKnowledgeSource
 
 json_source = JSONKnowledgeSource(
@@ -233,7 +230,7 @@ json_source = JSONKnowledgeSource(
 
 #### 智能体级别知识（独立）
 
-```python  主题={null}
+```python 
 from crewai import Agent, Task, Crew
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
@@ -268,7 +265,7 @@ result = crew.kickoff()  # 智能体知识独立工作
 
 当您调用 `crew.kickoff()` 时，确切的执行顺序是：
 
-```python  主题={null}
+```python 
 # 在执行期间
 for agent in self.agents:
     agent.crew = self  # 智能体获取对团队的引用
@@ -280,7 +277,7 @@ for agent in self.agents:
 
 每个知识级别使用独立的存储集合：
 
-```python  主题={null}
+```python 
 # 智能体知识存储
 agent_collection_name = agent.role  # 例如 "技术专家"
 
@@ -298,7 +295,7 @@ crew_collection_name = "crew"
 
 #### 示例 1：仅智能体知识
 
-```python  主题={null}
+```python 
 from crewai import Agent, Task, Crew
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
@@ -331,7 +328,7 @@ result = crew.kickoff()  # 完美工作
 
 #### 示例 2：智能体和团队知识
 
-```python  主题={null}
+```python 
 # 团队范围的知识（所有智能体共享）
 crew_knowledge = StringKnowledgeSource(
     content="公司政策和所有智能体需要的通用信息"
@@ -369,7 +366,7 @@ crew = Crew(
 
 #### 示例 3：具有不同知识的多个智能体
 
-```python  主题={null}
+```python 
 # 不同智能体的不同知识
 sales_knowledge = StringKnowledgeSource(content="销售流程和定价")
 tech_knowledge = StringKnowledgeSource(content="技术文档")
@@ -406,20 +403,20 @@ crew = Crew(
 # 每个智能体可以使用不同的嵌入提供商
 ```
 
-<Tip>
-  与使用工具从向量数据库中检索不同，预加载知识的智能体将不需要检索角色或任务。
-  只需添加您的智能体或团队运行所需的相关知识源即可。
 
-  知识源可以在智能体级别或团队级别添加。
-  团队级别的知识源将被团队中的**所有智能体**使用。
-  智能体级别的知识源将被预加载知识的**特定智能体**使用。
-</Tip>
+与使用工具从向量数据库中检索不同，预加载知识的智能体将不需要检索角色或任务。
+只需添加您的智能体或团队运行所需的相关知识源即可。
+
+知识源可以在智能体级别或团队级别添加。
+团队级别的知识源将被团队中的**所有智能体**使用。
+智能体级别的知识源将被预加载知识的**特定智能体**使用。
+
 
 ## 知识配置
 
 您可以为团队或智能体配置知识设置。
 
-```python 主题={null}
+```python
 from crewai.knowledge.knowledge_config import KnowledgeConfig
 
 knowledge_config = KnowledgeConfig(results_limit=10, score_threshold=0.5)
@@ -430,10 +427,9 @@ agent = Agent(
 )
 ```
 
-<Tip>
-  `results_limit`：要返回的相关文档数量。默认为 3。
-  `score_threshold`：文档被视为相关的最低分数。默认为 0.35。
-</Tip>
+`results_limit`：要返回的相关文档数量。默认为 3。
+`score_threshold`：文档被视为相关的最低分数。默认为 0.35。
+
 
 ## 支持的知识参数
 
@@ -495,7 +491,7 @@ C:\Users\{username}\AppData\Local\CrewAI\{project_name}\
 
 要准确查看 CrewAI 存储知识文件的位置：
 
-```python  主题={null}
+```python 
 from crewai.utilities.paths import db_storage_path
 import os
 
@@ -526,7 +522,7 @@ else:
 
 #### 选项 1：环境变量（推荐）
 
-```python  主题={null}
+```python 
 import os
 from crewai import Crew
 
@@ -543,7 +539,7 @@ crew = Crew(
 
 #### 选项 2：自定义知识存储
 
-```python  主题={null}
+```python 
 from crewai.knowledge.storage.knowledge_storage import KnowledgeStorage
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
@@ -565,7 +561,7 @@ knowledge_source.storage = custom_storage
 
 #### 选项 3：项目特定知识存储
 
-```python  主题={null}
+```python 
 import os
 from pathlib import Path
 
@@ -586,7 +582,7 @@ os.environ["CREWAI_STORAGE_DIR"] = str(knowledge_dir)
 
 #### 理解默认行为
 
-```python  主题={null}
+```python 
 from crewai import Agent, Crew, LLM
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
@@ -612,7 +608,7 @@ crew = Crew(
 
 #### 自定义知识嵌入提供商
 
-```python  主题={null}
+```python 
 # 选项 1：使用 Voyage AI（Claude 用户推荐）
 crew = Crew(
     agents=[agent],
@@ -664,7 +660,7 @@ agent = Agent(
 1. 首先确保您在 Azure 平台上部署了嵌入模型
 2. 然后您需要使用以下配置：
 
-```python  主题={null}
+```python 
 agent = Agent(
     role="研究员",
     goal="研究主题",
@@ -708,7 +704,7 @@ CrewAI 实现了一个智能查询重写机制，以优化知识检索。当智�
 
 #### 示例
 
-```python  主题={null}
+```python 
 # 原始任务提示
 task_prompt = "回答关于用户最喜欢的电影的以下问题：John 上周看了什么电影？请以 JSON 格式回答。"
 
@@ -718,9 +714,8 @@ rewritten_query = "John 上周看了什么电影？"
 
 重写的查询更专注于核心信息需求，并删除了关于输出格式的不相关说明。
 
-<Tip>
-  此机制是完全自动的，不需要用户进行任何配置。智能体的 LLM 用于执行查询重写，因此使用更强大的 LLM 可以提高重写查询的质量。
-</Tip>
+
+机制是完全自动的，不需要用户进行任何配置。智能体的 LLM 用于执行查询重写，因此使用更强大的 LLM 可以提高重写查询的质量。
 
 ### 知识事件
 
@@ -737,7 +732,7 @@ CrewAI 在知识检索过程中发出事件，您可以使用事件系统监听�
 
 #### 示例：监控知识检索
 
-```python  主题={null}
+```python 
 from crewai.events import (
     KnowledgeRetrievalStartedEvent,
     KnowledgeRetrievalCompletedEvent,
@@ -769,7 +764,7 @@ CrewAI 允许您通过扩展 `BaseKnowledgeSource` 类为任何类型的数据�
 #### 太空新闻知识源示例
 
 <CodeGroup>
-  ```python 主题={null}
+  ```python
   from crewai import Agent, Task, Crew, Process, LLM
   from crewai.knowledge.source.base_knowledge_source import BaseKnowledgeSource
   import requests
@@ -859,7 +854,7 @@ CrewAI 允许您通过扩展 `BaseKnowledgeSource` 类为任何类型的数据�
   )
   ```
 
-  ```输出 主题={null}
+  ```输出
   # 智能体：太空新闻分析师
   ## 任务：回答这个关于太空新闻的问题：太空探索的最新发展是什么？
 
@@ -890,7 +885,7 @@ CrewAI 允许您通过扩展 `BaseKnowledgeSource` 类为任何类型的数据�
 
 #### 检查智能体知识初始化
 
-```python  主题={null}
+```python 
 from crewai import Agent, Crew, Task
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
@@ -918,7 +913,7 @@ print(f"源数量：{len(agent.knowledge.sources)}")
 
 #### 验证知识存储位置
 
-```python  主题={null}
+```python 
 import os
 from crewai.utilities.paths import db_storage_path
 
@@ -939,7 +934,7 @@ if os.path.exists(knowledge_path):
 
 #### 测试知识检索
 
-```python  主题={null}
+```python 
 # 测试智能体知识检索
 if hasattr(agent, 'knowledge') and agent.knowledge:
     test_query = ["测试查询"]
@@ -954,7 +949,7 @@ if hasattr(agent, 'knowledge') and agent.knowledge:
 
 #### 检查知识集合
 
-```python  主题={null}
+```python 
 import chromadb
 from crewai.utilities.paths import db_storage_path
 import os
@@ -980,7 +975,7 @@ else:
 
 #### 检查知识处理
 
-```python  主题={null}
+```python 
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
 # 创建测试知识源
@@ -1006,7 +1001,7 @@ for i, chunk in enumerate(test_source.chunks[:3]):  # 显示前 3 个块
 
 **"文件未找到"错误：**
 
-```python  主题={null}
+```python 
 # 确保文件位于正确的位置
 from crewai.utilities.constants import KNOWLEDGE_DIRECTORY
 import os
@@ -1022,7 +1017,7 @@ if not os.path.exists(file_path):
 
 **"嵌入维度不匹配"错误：**
 
-```python  主题={null}
+```python 
 # 切换嵌入提供商时会发生这种情况
 # 重置知识存储以清除旧嵌入
 crew.reset_memories(command_type='knowledge')
@@ -1038,14 +1033,14 @@ crew = Crew(
 
 **"ChromaDB 权限被拒绝"错误：**
 
-```bash  主题={null}
+```bash 
 # 修复存储权限
 chmod -R 755 ~/.local/share/CrewAI/
 ```
 
 **知识在运行之间不持久化：**
 
-```python  主题={null}
+```python 
 # 验证存储位置一致性
 import os
 from crewai.utilities.paths import db_storage_path
@@ -1057,7 +1052,7 @@ print("知识路径：", os.path.join(db_storage_path(), "knowledge"))
 
 ### 知识重置命令
 
-```python  主题={null}
+```python 
 # 仅重置智能体特定知识
 crew.reset_memories(command_type='agent_knowledge')
 
@@ -1073,7 +1068,7 @@ crew.reset_memories(command_type='knowledge')
 
 如果您需要清除 CrewAI 中存储的知识，可以使用带有 `--knowledge` 选项的 `crewai reset-memories` 命令。
 
-```bash 命令 主题={null}
+```bash 命令
 crewai reset-memories --knowledge
 ```
 
