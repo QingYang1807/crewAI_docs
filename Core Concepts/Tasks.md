@@ -4,11 +4,11 @@
 
 ## 概述
 
-在 CrewAI 框架中，`任务`是由`代理`完成的具体分配。
+在 CrewAI 框架中，`任务`是由`Agent`完成的具体分配。
 
-任务提供了执行所需的所有详细信息，如描述、负责的代理、所需工具等，从而支持各种复杂程度的操作。
+任务提供了执行所需的所有详细信息，如描述、负责的Agent、所需工具等，从而支持各种复杂程度的操作。
 
-CrewAI 内的任务可以是协作的，需要多个代理一起工作。这是通过任务属性管理的，并由团队的过程协调，以增强团队合作和效率。
+CrewAI 内的任务可以是协作的，需要多个Agent一起工作。这是通过任务属性管理的，并由Crew（团队）的过程协调，以增强Crew（团队）合作和效率。
 
 <Note type="info" title="企业增强功能：可视化任务构建器">
   CrewAI AMP 在 Crew Studio 中包含一个可视化任务构建器，可简化复杂任务的创建和链接。可视化设计您的任务流程并实时测试，无需编写代码。
@@ -28,9 +28,9 @@ CrewAI 内的任务可以是协作的，需要多个代理一起工作。这是�
 任务可以两种方式执行：
 
 * **顺序执行**：按照定义的顺序执行任务
-* **分层执行**：根据代理的角色和专业分配任务
+* **分层执行**：根据Agent的角色和专业分配任务
 
-执行流程在创建团队时定义：
+执行流程在创建Crew（团队）时定义：
 
 ```python Code theme={null}
 crew = Crew(
@@ -47,12 +47,12 @@ crew = Crew(
 | **描述** | `description` | `str` | 对任务内容的清晰简洁陈述。 |
 | **预期输出** | `expected_output` | `str` | 对任务完成状态的详细描述。 |
 | **名称** *(可选)* | `name` | `Optional[str]` | 任务的名称标识符。 |
-| **代理** *(可选)* | `agent` | `Optional[BaseAgent]` | 负责执行任务的代理。 |
-| **工具** *(可选)* | `tools` | `List[BaseTool]` | 代理在此任务中仅限于使用的工具/资源。 |
+| **Agent** *(可选)* | `agent` | `Optional[BaseAgent]` | 负责执行任务的Agent。 |
+| **工具** *(可选)* | `tools` | `List[BaseTool]` | Agent在此任务中仅限于使用的工具/资源。 |
 | **上下文** *(可选)* | `context` | `Optional[List["Task"]]` | 其输出将用作此任务上下文的其他任务。 |
 | **异步执行** *(可选)* | `async_execution` | `Optional[bool]` | 任务是否应异步执行。默认为 False。 |
-| **人工输入** *(可选)* | `human_input` | `Optional[bool]` | 任务是否应有人工审查代理的最终答案。默认为 False。 |
-| **Markdown** *(可选)* | `markdown` | `Optional[bool]` | 任务是否应指示代理返回 Markdown 格式的最终答案。默认为 False。 |
+| **人工输入** *(可选)* | `human_input` | `Optional[bool]` | 任务是否应有人工审查Agent的最终答案。默认为 False。 |
+| **Markdown** *(可选)* | `markdown` | `Optional[bool]` | 任务是否应指示Agent返回 Markdown 格式的最终答案。默认为 False。 |
 | **配置** *(可选)* | `config` | `Optional[Dict[str, Any]]` | 任务特定的配置参数。 |
 | **输出文件** *(可选)* | `output_file` | `Optional[str]` | 用于存储任务输出的文件路径。 |
 | **创建目录** *(可选)* | `create_directory` | `Optional[bool]` | 如果 output\_file 的目录不存在，是否创建它。默认为 True。 |
@@ -75,13 +75,13 @@ crew = Crew(
 
 使用 YAML 配置提供了一种更清晰、更易维护的方式来定义任务。我们强烈建议在 CrewAI 项目中使用这种方法来定义任务。
 
-按照[安装](/en/installation)部分中的说明创建 CrewAI 项目后，导航到 `src/latest_ai_development/config/tasks.yaml` 文件，并修改模板以符合您的特定任务要求。
+按照[安装](/Get Started/Installation.md)部分中的说明创建 CrewAI 项目后，导航到 `src/latest_ai_development/config/tasks.yaml` 文件，并修改模板以符合您的特定任务要求。
 
 <Note>
-  YAML 文件中的变量（如 `{topic}`）将在运行团队时替换为您的输入值：
+  YAML 文件中的变量（如 `{topic}`）将在运行Crew（团队）时替换为您的输入值：
 
   ```python Code theme={null}
-  crew.kickoff(inputs={'topic': 'AI 代理'})
+  crew.kickoff(inputs={'topic': 'AI Agent'})
   ```
 </Note>
 
@@ -109,7 +109,7 @@ reporting_task:
   output_file: report.md
 ````
 
-要在您的代码中使用此 YAML 配置，创建一个继承自 `CrewBase` 的团队类：
+要在您的代码中使用此 YAML 配置，创建一个继承自 `CrewBase` 的Crew（团队）类：
 
 ```python crew.py theme={null}
 # src/latest_ai_development/crew.py
@@ -177,12 +177,12 @@ from crewai import Task
 
 research_task = Task(
     description="""
-        对 AI 代理进行彻底研究。
+        对 AI Agent进行彻底研究。
         确保你找到任何有趣且相关的信息，
         考虑到当前年份是 2025 年。
     """,
     expected_output="""
-        包含 10 个关于 AI 代理最相关信息的要点列表
+        包含 10 个关于 AI Agent最相关信息的要点列表
     """,
     agent=researcher
 )
@@ -222,7 +222,7 @@ reporting_task = Task(
 | **原始输出** | `raw` | `str` | 任务的原始输出。这是输出的默认格式。 |
 | **Pydantic** | `pydantic` | `Optional[BaseModel]` | 表示任务结构化输出的 Pydantic 模型对象。 |
 | **JSON 字典** | `json_dict` | `Optional[Dict[str, Any]]` | 表示任务 JSON 输出的字典。 |
-| **代理** | `agent` | `str` | 执行任务的代理。 |
+| **Agent** | `agent` | `str` | 执行任务的Agent。 |
 | **输出格式** | `output_format` | `OutputFormat` | 任务输出的格式，选项包括 RAW、JSON 和 Pydantic。默认为 RAW。 |
 
 ### 任务方法和属性
@@ -248,7 +248,7 @@ task = Task(
     tools=[search_tool]
 )
 
-# 执行团队
+# 执行Crew（团队）
 crew = Crew(
     agents=[research_agent],
     tasks=[task],
@@ -271,7 +271,7 @@ if task_output.pydantic:
 
 ## Markdown 输出格式化
 
-`markdown` 参数启用任务输出的自动 markdown 格式化。设置为 `True` 时，任务将指示代理使用适当的 Markdown 语法格式化最终答案。
+`markdown` 参数启用任务输出的自动 markdown 格式化。设置为 `True` 时，任务将指示Agent使用适当的 Markdown 语法格式化最终答案。
 
 ### 使用 Markdown 格式化
 
@@ -285,7 +285,7 @@ formatted_task = Task(
 )
 ```
 
-当 `markdown=True` 时，代理将收到额外的指示，使用以下格式化输出：
+当 `markdown=True` 时，Agent将收到额外的指示，使用以下格式化输出：
 
 * `#` 用于标题
 * `**文本**` 用于粗体文本
@@ -339,7 +339,7 @@ analysis_task = Task(
 
 ## 任务护栏
 
-任务护栏提供了一种在任务输出传递到下一个任务之前验证和转换输出的方法。此功能有助于确保数据质量，并在代理的输出不符合特定标准时提供反馈。
+任务护栏提供了一种在任务输出传递到下一个任务之前验证和转换输出的方法。此功能有助于确保数据质量，并在Agent的输出不符合特定标准时提供反馈。
 
 护栏是作为包含自定义验证逻辑的 Python 函数实现的，让您完全控制验证过程，并确保可靠、确定的结果。
 
@@ -435,8 +435,8 @@ def complex_validation(result: TaskOutput) -> Tuple[bool, Any]:
 
 当护栏返回 `(False, error)` 时：
 
-1. 错误会发送回给代理
-2. 代理尝试修复问题
+1. 错误会发送回给Agent
+2. Agent尝试修复问题
 3. 过程重复直到：
    * 护栏返回 `(True, result)`
    * 达到最大重试次数（`guardrail_max_retries`）
@@ -468,7 +468,7 @@ task = Task(
 ## 从任务获取结构化一致的输出
 
 <Note>
-  还要注意，团队的最终任务的输出成为整个团队的最终输出。
+  还要注意，Crew（团队）的最终任务的输出成为整个Crew（团队）的最终输出。
 </Note>
 
 ### 使用 `output_pydantic`
@@ -490,7 +490,7 @@ class Blog(BaseModel):
 
 
 blog_agent = Agent(
-    role="博客内容生成代理",
+    role="博客内容生成Agent",
     goal="生成博客标题和内容",
     backstory="""你是一位专家内容创作者，擅长制作引人入胜和信息丰富的博客文章。""",
     verbose=False,
@@ -505,7 +505,7 @@ task1 = Task(
     output_pydantic=Blog,
 )
 
-# 使用顺序流程实例化您的团队
+# 使用顺序流程实例化您的Crew（团队）
 crew = Crew(
     agents=[blog_agent],
     tasks=[task1],
@@ -547,7 +547,7 @@ print("博客:", result)
 
 * 定义了一个包含 title 和 content 字段的 Pydantic 模型 Blog。
 * 任务 task1 使用 output\_pydantic 属性指定其输出应符合 Blog 模型。
-* 执行团队后，您可以如所示以多种方式访问结构化输出。
+* 执行Crew（团队）后，您可以如所示以多种方式访问结构化输出。
 
 #### 访问输出的说明
 
@@ -575,9 +575,9 @@ class Blog(BaseModel):
     content: str
 
 
-# 定义代理
+# 定义Agent
 blog_agent = Agent(
-    role="博客内容生成代理",
+    role="博客内容生成Agent",
     goal="生成博客标题和内容",
     backstory="""你是一位专家内容创作者，擅长制作引人入胜和信息丰富的博客文章。""",
     verbose=False,
@@ -593,7 +593,7 @@ task1 = Task(
     output_json=Blog,
 )
 
-# 使用顺序流程实例化团队
+# 使用顺序流程实例化Crew（团队）
 crew = Crew(
     agents=[blog_agent],
     tasks=[task1],
@@ -601,7 +601,7 @@ crew = Crew(
     process=Process.sequential,
 )
 
-# 启动团队执行任务
+# 启动Crew（团队）执行任务
 result = crew.kickoff()
 
 # 选项 1：使用字典样式索引访问属性
@@ -620,7 +620,7 @@ print("博客:", result)
 
 * 定义了一个包含 title 和 content 字段的 Pydantic 模型 Blog，用于指定 JSON 输出的结构。
 * 任务 task1 使用 output\_json 属性指示它期望符合 Blog 模型的 JSON 输出。
-* 执行团队后，您可以如所示以两种方式访问结构化的 JSON 输出。
+* 执行Crew（团队）后，您可以如所示以两种方式访问结构化的 JSON 输出。
 
 #### 访问输出的说明
 
@@ -633,7 +633,7 @@ print("博客:", result)
 
 ## 将工具与任务集成
 
-利用 [CrewAI 工具包](https://github.com/joaomdmoura/crewai-tools) 和 [LangChain 工具](https://python.langchain.com/docs/integrations/tools) 来增强任务性能和代理交互。
+利用 [CrewAI 工具包](https://github.com/joaomdmoura/crewai-tools) 和 [LangChain 工具](https://python.langchain.com/docs/integrations/tools) 来增强任务性能和Agent交互。
 
 ## 创建带工具的任务
 
@@ -673,7 +673,7 @@ result = crew.kickoff()
 print(result)
 ```
 
-这演示了带有特定工具的任务如何覆盖代理的默认工具集，以便定制任务执行。
+这演示了带有特定工具的任务如何覆盖Agent的默认工具集，以便定制任务执行。
 
 ## 引用其他任务
 
@@ -712,7 +712,7 @@ write_blog_task = Task(
 
 ## 异步执行
 
-您可以将任务定义为异步执行。这意味着团队不会等待它完成就继续下一个任务。这对于需要很长时间完成的任务或对执行下一个任务不重要的任务很有用。
+您可以将任务定义为异步执行。这意味着Crew（团队）不会等待它完成就继续下一个任务。这对于需要很长时间完成的任务或对执行下一个任务不重要的任务很有用。
 
 然后，您可以使用 `context` 属性在未来的任务中定义它应等待异步任务的输出完成。
 
@@ -772,7 +772,7 @@ research_task = Task(
 
 ## 访问特定任务输出
 
-团队运行完成后，您可以使用任务对象的 `output` 属性访问特定任务的输出：
+Crew（团队）运行完成后，您可以使用任务对象的 `output` 属性访问特定任务的输出：
 
 ```python Code theme={null}
 # ...
@@ -803,7 +803,7 @@ print(f"""
 
 ## 工具覆盖机制
 
-在任务中指定工具允许动态调整代理功能，强调 CrewAI 的灵活性。
+在任务中指定工具允许动态调整Agent功能，强调 CrewAI 的灵活性。
 
 ## 错误处理和验证机制
 
@@ -907,7 +907,7 @@ except RuntimeError as e:
 
 ## 结论
 
-任务是 CrewAI 中代理行动的驱动力。
-通过正确定义任务及其结果，您为 AI 代理有效工作奠定了基础，无论是独立还是作为协作单元。
+任务是 CrewAI 中Agent行动的驱动力。
+通过正确定义任务及其结果，您为 AI Agent有效工作奠定了基础，无论是独立还是作为协作单元。
 为任务配备适当的工具、理解执行过程并遵循强大的验证实践对于最大化 CrewAI 的潜力至关重要，
-确保代理为其任务做好有效准备，并按预期执行任务。
+确保Agent为其任务做好有效准备，并按预期执行任务。
