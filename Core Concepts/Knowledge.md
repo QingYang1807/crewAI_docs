@@ -754,98 +754,91 @@ CrewAI 允许您通过扩展 `BaseKnowledgeSource` 类为任何类型的数据�
 
 #### 太空新闻知识源示例
 
-<CodeGroup>
-  ```python
-  from crewai import Agent, Task, Crew, Process, LLM
-  from crewai.knowledge.source.base_knowledge_source import BaseKnowledgeSource
-  import requests
-  from datetime import datetime
-  from typing import Dict, Any
-  from pydantic import BaseModel, Field
+```python
+from crewai import Agent, Task, Crew, Process, LLM
+from crewai.knowledge.source.base_knowledge_source import BaseKnowledgeSource
+import requests
+from datetime import datetime
+from typing import Dict, Any
+from pydantic import BaseModel, Field
 
-  class SpaceNewsKnowledgeSource(BaseKnowledgeSource):
-      """从太空新闻 API 获取数据的知识源。"""
+class SpaceNewsKnowledgeSource(BaseKnowledgeSource):
+    """从太空新闻 API 获取数据的知识源。"""
 
-      api_endpoint: str = Field(description="API 端点 URL")
-      limit: int = Field(default=10, description="要获取的文章数量")
+  api_endpoint: str = Field(description="API 端点 URL")
+  limit: int = Field(default=10, description="要获取的文章数量")
+  def load_content(self) -> Dict[Any, str]:
+      """获取并格式化太空新闻文章。"""
+      try:
+          response = requests.get(
+              f"{self.api_endpoint}?limit={self.limit}"
+          )
+          response.raise_for_status()
+          data = response.json()
+          articles = data.get('results', [])
+          formatted_data = self.validate_content(articles)
+          return {self.api_endpoint: formatted_data}
+      except Exception as e:
+          raise ValueError(f"获取太空新闻失败：{str(e)}")
 
-      def load_content(self) -> Dict[Any, str]:
-          """获取并格式化太空新闻文章。"""
-          try:
-              response = requests.get(
-                  f"{self.api_endpoint}?limit={self.limit}"
-              )
-              response.raise_for_status()
+  def validate_content(self, articles: list) -> str:
+      """将文章格式化为可读文本。"""
+      formatted = "太空新闻文章：\n\n"
+      for article in articles:
+          formatted += f"""
+              标题：{article['title']}
+              发布时间：{article['published_at']}
+              摘要：{article['summary']}
+              新闻网站：{article['news_site']}
+              网址：{article['url']}
+              -------------------"""
+      return formatted
 
-              data = response.json()
-              articles = data.get('results', [])
+  def add(self) -> None:
+      """处理并存储文章。"""
+      content = self.load_content()
+      for _, text in content.items():
+          chunks = self._chunk_text(text)
+          self.chunks.extend(chunks)
+      self._save_documents()
 
-              formatted_data = self.validate_content(articles)
-              return {self.api_endpoint: formatted_data}
-          except Exception as e:
-              raise ValueError(f"获取太空新闻失败：{str(e)}")
-
-      def validate_content(self, articles: list) -> str:
-          """将文章格式化为可读文本。"""
-          formatted = "太空新闻文章：\n\n"
-          for article in articles:
-              formatted += f"""
-                  标题：{article['title']}
-                  发布时间：{article['published_at']}
-                  摘要：{article['summary']}
-                  新闻网站：{article['news_site']}
-                  网址：{article['url']}
-                  -------------------"""
-          return formatted
-
-      def add(self) -> None:
-          """处理并存储文章。"""
-          content = self.load_content()
-          for _, text in content.items():
-              chunks = self._chunk_text(text)
-              self.chunks.extend(chunks)
-
-          self._save_documents()
-
-  # 创建知识源
-  recent_news = SpaceNewsKnowledgeSource(
-      api_endpoint="https://api.spaceflightnewsapi.net/v4/articles",
-      limit=10,
+# 创建知识源
+recent_news = SpaceNewsKnowledgeSource(
+    api_endpoint="https://api.spaceflightnewsapi.net/v4/articles",
+    limit=10,
+)
+# 创建专业智能体
+space_analyst = Agent(
+    role="太空新闻分析师",
+    goal="准确全面地回答关于太空新闻的问题",
+    backstory="""您是一位航天行业分析师，专长于太空探索、
+    卫星技术和航天行业趋势。您擅长回答关于
+    太空新闻的问题并提供详细、准确的信息。""",
+    knowledge_sources=[recent_news],
+    llm=LLM(model="gpt-4", temperature=0.0)
   )
 
-  # 创建专业智能体
-  space_analyst = Agent(
-      role="太空新闻分析师",
-      goal="准确全面地回答关于太空新闻的问题",
-      backstory="""您是一位航天行业分析师，专长于太空探索、
-      卫星技术和航天行业趋势。您擅长回答关于
-      太空新闻的问题并提供详细、准确的信息。""",
-      knowledge_sources=[recent_news],
-      llm=LLM(model="gpt-4", temperature=0.0)
-  )
+# 创建处理用户问题的任务
+analysis_task = Task(
+    description="回答这个关于太空新闻的问题：{user_question}",
+    expected_output="基于最近太空新闻文章的详细回答",
+    agent=space_analyst
+)
 
-  # 创建处理用户问题的任务
-  analysis_task = Task(
-      description="回答这个关于太空新闻的问题：{user_question}",
-      expected_output="基于最近太空新闻文章的详细回答",
-      agent=space_analyst
-  )
+# 创建并运行团队
+crew = Crew(
+    agents=[space_analyst],
+    tasks=[analysis_task],
+    verbose=True,
+    process=Process.sequential
+)
+# 示例用法
+result = crew.kickoff(
+    inputs={"user_question": "太空探索的最新发展是什么？"}
+)
+```
 
-  # 创建并运行团队
-  crew = Crew(
-      agents=[space_analyst],
-      tasks=[analysis_task],
-      verbose=True,
-      process=Process.sequential
-  )
-
-  # 示例用法
-  result = crew.kickoff(
-      inputs={"user_question": "太空探索的最新发展是什么？"}
-  )
-  ```
-
-  ```输出
+```输出
   # 智能体：太空新闻分析师
   ## 任务：回答这个关于太空新闻的问题：太空探索的最新发展是什么？
 
@@ -1059,7 +1052,7 @@ crew.reset_memories(command_type='knowledge')
 
 如果您需要清除 CrewAI 中存储的知识，可以使用带有 `--knowledge` 选项的 `crewai reset-memories` 命令。
 
-```bash 命令
+```bash
 crewai reset-memories --knowledge
 ```
 
@@ -1067,43 +1060,37 @@ crewai reset-memories --knowledge
 
 ## 最佳实践
 
-<AccordionGroup>
-  <Accordion title="内容组织">
-    * 为您的内容类型保持适当的块大小
-    * 考虑内容重叠以保持上下文
-    * 将相关信息组织到单独的知识源中
-  </Accordion>
 
-  <Accordion title="性能技巧">
-    * 根据内容复杂性调整块大小
-    * 配置适当的嵌入模型
-    * 考虑使用本地嵌入提供商以获得更快的处理速度
-  </Accordion>
+### 内容组织
+* 为您的内容类型保持适当的块大小
+* 考虑内容重叠以保持上下文
+* 将相关信息组织到单独的知识源中
 
-  <Accordion title="一次性知识">
-    * 使用 CrewAI 提供的典型文件结构，每次触发执行时都会嵌入知识源。
-    * 如果知识源很大，这会导致低效和增加延迟，因为每次都会嵌入相同的数据。
-    * 要解决此问题，直接初始化 knowledge 参数而不是 knowledge_sources 参数。
-    * 链接到问题以获取完整思路 [Github Issue](https://github.com/crewAIInc/crewAI/issues/2755)
-  </Accordion>
+### 性能技巧
+* 根据内容复杂性调整块大小
+* 配置适当的嵌入模型
+* 考虑使用本地嵌入提供商以获得更快的处理速度
 
-  <Accordion title="知识管理">
-    * 将智能体级别的知识用于角色特定信息
-    * 将团队级别的知识用于所有智能体需要的共享信息
-    * 如果需要不同的嵌入策略，请在智能体级别设置嵌入器
-    * 通过保持智能体角色描述性来使用一致的集合命名
-    * 通过在执行后检查 agent.knowledge 来测试知识初始化
-    * 监控存储位置以了解知识的存储位置
-    * 使用正确的命令类型适当地重置知识
-  </Accordion>
+### 一次性知识
+* 使用 CrewAI 提供的典型文件结构，每次触发执行时都会嵌入知识源。
+* 如果知识源很大，这会导致低效和增加延迟，因为每次都会嵌入相同的数据。
+* 要解决此问题，直接初始化 knowledge 参数而不是 knowledge_sources 参数。
+* 链接到问题以获取完整思路 [Github Issue](https://github.com/crewAIInc/crewAI/issues/2755)
 
-  <Accordion title="生产最佳实践">
-    * 在生产环境中将 `CREWAI_STORAGE_DIR` 设置为已知位置
-    * 选择明确的嵌入提供商以匹配您的 LLM 设置并避免 API 密钥冲突
-    * 随着文档添加监控知识存储大小
-    * 使用集合名称按域或目的组织知识源
-    * 在您的备份和部署策略中包含知识目录
-    * 为知识文件和存储目录设置适当的文件权限
-    * 使用环境变量管理 API 密钥和敏感配置
-  </Accordion>
-</AccordionGroup>
+### 知识管理
+* 将智能体级别的知识用于角色特定信息
+* 将团队级别的知识用于所有智能体需要的共享信息
+* 如果需要不同的嵌入策略，请在智能体级别设置嵌入器
+* 通过保持智能体角色描述性来使用一致的集合命名
+* 通过在执行后检查 agent.knowledge 来测试知识初始化
+* 监控存储位置以了解知识的存储位置
+* 使用正确的命令类型适当地重置知识
+
+### 生产最佳实践
+* 在生产环境中将 `CREWAI_STORAGE_DIR` 设置为已知位置
+* 选择明确的嵌入提供商以匹配您的 LLM 设置并避免 API 密钥冲突
+* 随着文档添加监控知识存储大小
+* 使用集合名称按域或目的组织知识源
+* 在您的备份和部署策略中包含知识目录
+* 为知识文件和存储目录设置适当的文件权限
+* 使用环境变量管理 API 密钥和敏感配置
