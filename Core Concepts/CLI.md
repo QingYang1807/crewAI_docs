@@ -6,13 +6,13 @@
 
 ## 概述
 
-CrewAI CLI 提供了一组命令来与 CrewAI 交互，允许您创建、训练、运行和管理团队及流程。
+CrewAI CLI 提供了一组命令来与 CrewAI 交互，允许您创建、训练、运行和管理Crew（团队）及流程。
 
 ## 安装
 
 要使用 CrewAI CLI，请确保已安装 CrewAI：
 
-```shell Terminal theme={null}
+```shell
 pip install crewai
 ```
 
@@ -20,7 +20,7 @@ pip install crewai
 
 CrewAI CLI 命令的基本结构是：
 
-```shell Terminal theme={null}
+```shell
 crewai [命令] [选项] [参数]
 ```
 
@@ -28,18 +28,18 @@ crewai [命令] [选项] [参数]
 
 ### 1. 创建
 
-创建新的团队或流程。
+创建新的Crew（团队）或流程。
 
-```shell Terminal theme={null}
+```shell
 crewai create [选项] 类型 名称
 ```
 
-* `类型`：在 "crew"（团队）或 "flow"（流程）之间选择
-* `名称`：团队或流程的名称
+* `类型`：在 "crew"（Crew（团队））或 "flow"（流程）之间选择
+* `名称`：Crew（团队）或流程的名称
 
 示例：
 
-```shell Terminal theme={null}
+```shell
 crewai create crew my_new_crew
 crewai create flow my_new_flow
 ```
@@ -48,7 +48,7 @@ crewai create flow my_new_flow
 
 显示 CrewAI 的安装版本。
 
-```shell Terminal theme={null}
+```shell
 crewai version [选项]
 ```
 
@@ -56,41 +56,41 @@ crewai version [选项]
 
 示例：
 
-```shell Terminal theme={null}
+```shell
 crewai version
 crewai version --tools
 ```
 
 ### 3. 训练
 
-训练指定迭代次数的团队。
+训练指定迭代次数的Crew（团队）。
 
-```shell Terminal theme={null}
+```shell
 crewai train [选项]
 ```
 
-* `-n, --n_iterations 整数`：训练团队的迭代次数（默认：5）
+* `-n, --n_iterations 整数`：训练Crew（团队）的迭代次数（默认：5）
 * `-f, --filename 文本`：用于训练的自定义文件路径（默认："trained_agents_data.pkl"）
 
 示例：
 
-```shell Terminal theme={null}
+```shell
 crewai train -n 10 -f my_training_data.pkl
 ```
 
 ### 4. 重放
 
-从特定任务重放团队执行。
+从特定任务重放Crew（团队）执行。
 
-```shell Terminal theme={null}
+```shell
 crewai replay [选项]
 ```
 
-* `-t, --task_id 文本`：从此任务 ID 重放团队执行，包括所有后续任务
+* `-t, --task_id 文本`：从此任务 ID 重放Crew（团队）执行，包括所有后续任务
 
 示例：
 
-```shell Terminal theme={null}
+```shell
 crewai replay -t task_123456
 ```
 
@@ -98,15 +98,15 @@ crewai replay -t task_123456
 
 检索您最新的 crew.kickoff() 任务输出。
 
-```shell Terminal theme={null}
+```shell
 crewai log-tasks-outputs
 ```
 
 ### 6. 重置记忆
 
-重置团队记忆（长期、短期、实体、最新团队启动输出）。
+重置Crew（团队）记忆（长期、短期、实体、最新Crew（团队）启动输出）。
 
-```shell Terminal theme={null}
+```shell
 crewai reset-memories [选项]
 ```
 
@@ -115,43 +115,43 @@ crewai reset-memories [选项]
 * `-e, --entities`：重置实体记忆
 * `-k, --kickoff-outputs`：重置最新启动任务输出
 * `-kn, --knowledge`：重置知识存储
-* `-akn, --agent-knowledge`：重置代理知识存储
+* `-akn, --agent-knowledge`：重置Agent知识存储
 * `-a, --all`：重置所有记忆
 
 示例：
 
-```shell Terminal theme={null}
+```shell
 crewai reset-memories --long --short
 crewai reset-memories --all
 ```
 
 ### 7. 测试
 
-测试团队并评估结果。
+测试Crew（团队）并评估结果。
 
-```shell Terminal theme={null}
+```shell
 crewai test [选项]
 ```
 
-* `-n, --n_iterations 整数`：测试团队的迭代次数（默认：3）
-* `-m, --model 文本`：在团队上运行测试的 LLM 模型（默认："gpt-4o-mini"）
+* `-n, --n_iterations 整数`：测试Crew（团队）的迭代次数（默认：3）
+* `-m, --model 文本`：在Crew（团队）上运行测试的 LLM 模型（默认："gpt-4o-mini"）
 
 示例：
 
-```shell Terminal theme={null}
+```shell
 crewai test -n 5 -m gpt-3.5-turbo
 ```
 
 ### 8. 运行
 
-运行团队或流程。
+运行Crew（团队）或流程。
 
-```shell Terminal theme={null}
+```shell
 crewai run
 ```
 
 <Note>
-  从 0.103.0 版本开始，`crewai run` 命令可用于运行标准团队和流程。对于流程，它会自动从 pyproject.toml 中检测类型并运行相应的命令。这是现在运行团队和流程的推荐方式。
+  从 0.103.0 版本开始，`crewai run` 命令可用于运行标准Crew（团队）和流程。对于流程，它会自动从 pyproject.toml 中检测类型并运行相应的命令。这是现在运行Crew（团队）和流程的推荐方式。
 </Note>
 
 <Note>
@@ -161,11 +161,11 @@ crewai run
 
 ### 9. 聊天
 
-从 `0.98.0` 版本开始，当您运行 `crewai chat` 命令时，您将启动与团队的交互式会话。AI 助手将通过请求执行团队所需的必要输入来指导您。一旦提供所有输入，团队将执行其任务。
+从 `0.98.0` 版本开始，当您运行 `crewai chat` 命令时，您将启动与Crew（团队）的交互式会话。AI 助手将通过请求执行Crew（团队）所需的必要输入来指导您。一旦提供所有输入，Crew（团队）将执行其任务。
 
 收到结果后，您可以继续与助手交互以获取进一步的指示或问题。
 
-```shell Terminal theme={null}
+```shell
 crewai chat
 ```
 
@@ -191,16 +191,16 @@ crewai chat
 
 ### 10. 部署
 
-将团队或流程部署到 [CrewAI AMP](https://app.crewai.com)。
+将Crew（团队）或流程部署到 [CrewAI AMP](https://app.crewai.com)。
 
 * **认证**：您需要经过身份验证才能部署到 CrewAI AMP。
   您可以使用以下命令登录或创建账户：
-  ```shell Terminal theme={null}
+  ```shell
   crewai login
   ```
 
-* **创建部署**：通过身份验证后，您可以从本地项目的根目录为团队或流程创建部署。
-  ```shell Terminal theme={null}
+* **创建部署**：通过身份验证后，您可以从本地项目的根目录为Crew（团队）或流程创建部署。
+  ```shell
   crewai deploy create
   ```
   * 读取您的本地项目配置。
@@ -210,7 +210,7 @@ crewai chat
 
 管理您的 CrewAI AMP 组织。
 
-```shell Terminal theme={null}
+```shell
 crewai org [命令] [选项]
 ```
 
@@ -218,19 +218,19 @@ crewai org [命令] [选项]
 
 * `list`：列出您所属的所有组织
 
-```shell Terminal theme={null}
+```shell
 crewai org list
 ```
 
 * `current`：显示您当前活动的组织
 
-```shell Terminal theme={null}
+```shell
 crewai org current
 ```
 
 * `switch`：切换到特定组织
 
-```shell Terminal theme={null}
+```shell
 crewai org switch <组织ID>
 ```
 
@@ -241,44 +241,44 @@ crewai org switch <组织ID>
 * **创建部署**（续）：
   * 将部署链接到相应的远程 GitHub 存储库（通常自动检测）。
 
-* **部署团队**：通过身份验证后，您可以将团队或流程部署到 CrewAI AMP。
-  ```shell Terminal theme={null}
+* **部署Crew（团队）**：通过身份验证后，您可以将Crew（团队）或流程部署到 CrewAI AMP。
+  ```shell
   crewai deploy push
   ```
   * 在 CrewAI AMP 平台上启动部署过程。
   * 成功启动后，它将输出 "部署创建成功！" 消息以及部署名称和唯一的部署 ID（UUID）。
 
 * **部署状态**：您可以使用以下命令检查部署状态：
-  ```shell Terminal theme={null}
+  ```shell
   crewai deploy status
   ```
-  这将获取您最近部署尝试的最新部署状态（例如，"为团队构建镜像"、"部署已排队"、"在线"）。
+  这将获取您最近部署尝试的最新部署状态（例如，"为Crew（团队）构建镜像"、"部署已排队"、"在线"）。
 
 * **部署日志**：您可以使用以下命令检查部署日志：
-  ```shell Terminal theme={null}
+  ```shell
   crewai deploy logs
   ```
   这会将部署日志流式传输到您的终端。
 
 * **列出部署**：您可以使用以下命令列出所有部署：
-  ```shell Terminal theme={null}
+  ```shell
   crewai deploy list
   ```
   这将列出您的所有部署。
 
 * **删除部署**：您可以使用以下命令删除部署：
-  ```shell Terminal theme={null}
+  ```shell
   crewai deploy remove
   ```
   这将从 CrewAI AMP 平台删除部署。
 
 * **帮助命令**：您可以使用以下命令获取 CLI 的帮助：
-  ```shell Terminal theme={null}
+  ```shell
   crewai deploy --help
   ```
   这将显示 CrewAI 部署 CLI 的帮助消息。
 
-观看此视频教程，了解使用 CLI 将团队部署到 [CrewAI AMP](http://app.crewai.com) 的分步演示。
+观看此视频教程，了解使用 CLI 将Crew（团队）部署到 [CrewAI AMP](http://app.crewai.com) 的分步演示。
 
 <iframe className="w-full aspect-video rounded-xl" src="https://www.youtube.com/embed/3EqSV-CYDZA" title="CrewAI Deployment Guide" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
 
@@ -286,7 +286,7 @@ crewai org switch <组织ID>
 
 使用安全的设备代码流程与 CrewAI AMP 进行身份验证（无需输入电子邮件）。
 
-```shell Terminal theme={null}
+```shell
 crewai login
 ```
 
@@ -334,7 +334,7 @@ crewai login
 
 管理 CrewAI 的 CLI 配置设置。
 
-```shell Terminal theme={null}
+```shell
 crewai config [命令] [选项]
 ```
 
@@ -342,19 +342,19 @@ crewai config [命令] [选项]
 
 * `list`：显示所有 CLI 配置参数
 
-```shell Terminal theme={null}
+```shell
 crewai config list
 ```
 
 * `set`：设置 CLI 配置参数
 
-```shell Terminal theme={null}
+```shell
 crewai config set <键> <值>
 ```
 
 * `reset`：将所有 CLI 配置参数重置为默认值
 
-```shell Terminal theme={null}
+```shell
 crewai config reset
 ```
 
@@ -370,7 +370,7 @@ crewai config reset
 
 显示当前配置：
 
-```shell Terminal theme={null}
+```shell
 crewai config list
 ```
 
@@ -388,25 +388,25 @@ crewai config list
 
 设置企业基本 URL：
 
-```shell Terminal theme={null}
+```shell
 crewai config set enterprise_base_url https://my-enterprise.crewai.com
 ```
 
 设置 OAuth2 提供商：
 
-```shell Terminal theme={null}
+```shell
 crewai config set oauth2_provider auth0
 ```
 
 设置 OAuth2 域：
 
-```shell Terminal theme={null}
+```shell
 crewai config set oauth2_domain my-company.auth0.com
 ```
 
 将所有配置重置为默认值：
 
-```shell Terminal theme={null}
+```shell
 crewai config reset
 ```
 
