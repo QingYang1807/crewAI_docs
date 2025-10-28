@@ -1,54 +1,56 @@
-# 内存系统
+# 记忆系统
 
-> 在CrewAI框架中利用内存系统来增强代理能力。
+> 在CrewAI框架中利用记忆系统来增强Agent能力。
 
 ## 概述
 
-CrewAI框架提供了一个复杂的内存系统，旨在显著增强AI代理的能力。CrewAI提供了**两种不同的内存方法**，适用于不同的用例：
+CrewAI框架提供了一个复杂的记忆系统，旨在显著增强AI Agent的能力。
 
-1. **基本内存系统** - 内置的短期、长期和实体内存
-2. **外部内存** - 独立的外部内存提供者
+CrewAI提供了**两种不同的记忆方法**，适用于不同的用例：
 
-## 内存系统组件
+1. **基本记忆系统** - 内置的短期、长期和实体记忆
+2. **外部记忆** - 独立的外部记忆提供者
+
+## 记忆系统组件
 
 | 组件 | 描述 |
 | :--- | :--- |
-| **短期内存** | 使用`RAG`临时存储最近的交互和结果，使代理能够在当前执行期间回忆并利用与其当前上下文相关的信息。 |
-| **长期内存** | 保留过去执行中有价值的见解和学习，允许代理随着时间的推移构建和完善其知识。 |
-| **实体内存** | 捕获并组织在任务过程中遇到的实体（人、地点、概念）信息，促进更深层次的理解和关系映射。使用`RAG`存储实体信息。 |
-| **上下文内存** | 通过结合`ShortTermMemory`、`LongTermMemory`、`ExternalMemory`和`EntityMemory`来维护交互的上下文，有助于在一系列任务或对话中保持代理响应的连贯性和相关性。 |
+| **短期记忆** | 使用`RAG`临时存储最近的交互和结果，使Agent能够在当前执行期间回忆并利用与其当前上下文相关的信息。 |
+| **长期记忆** | 保留过去执行中有价值的见解和学习，允许Agent随着时间的推移构建和完善其知识。 |
+| **实体记忆** | 捕获并组织在任务过程中遇到的实体（人、地点、概念）信息，促进更深层次的理解和关系映射。使用`RAG`存储实体信息。 |
+| **上下文记忆** | 通过结合`ShortTermMemory`、`LongTermMemory`、`ExternalMemory`和`EntityMemory`来维护交互的上下文，有助于在一系列任务或对话中保持Agent响应的连贯性和相关性。 |
 
-## 1. 基本内存系统（推荐）
+## 1. 基本记忆系统（推荐）
 
-最简单且最常用的方法。只需一个参数即可为您的团队启用内存：
+最简单且最常用的方法。只需一个参数即可为您的团队启用记忆：
 
 ### 快速开始
 
 ```python  theme={null}
 from crewai import Crew, Agent, Task, Process
 
-# 启用基本内存系统
+# 启用基本记忆系统
 crew = Crew(
     agents=[...],
     tasks=[...],
     process=Process.sequential,
-    memory=True,  # 启用短期、长期和实体内存
+    memory=True,  # 启用短期、长期和实体记忆
     verbose=True
 )
 ```
 
 ### 工作原理
 
-* **短期内存**：使用带有RAG的ChromaDB处理当前上下文
-* **长期内存**：使用SQLite3存储跨会话的任务结果
-* **实体内存**：使用RAG跟踪实体（人、地点、概念）
+* **短期记忆**：使用带有RAG的ChromaDB处理当前上下文
+* **长期记忆**：使用SQLite3存储跨会话的任务结果
+* **实体记忆**：使用RAG跟踪实体（人、地点、概念）
 * **存储位置**：通过`appdirs`包确定平台特定位置
 * **自定义存储目录**：设置`CREWAI_STORAGE_DIR`环境变量
 
 ## 存储位置透明度
 
 <Info>
-  **了解存储位置**：CrewAI使用遵循操作系统惯例的平台特定目录来存储内存和知识文件。了解这些位置有助于生产部署、备份和调试。
+  **了解存储位置**：CrewAI使用遵循操作系统惯例的平台特定目录来存储记忆和知识文件。了解这些位置有助于生产部署、备份和调试。
 </Info>
 
 ### CrewAI存储文件的位置
@@ -62,9 +64,9 @@ crew = Crew(
 ```
 ~/Library/Application Support/CrewAI/{project_name}/
 ├── knowledge/           # 知识库ChromaDB文件
-├── short_term_memory/   # 短期内存ChromaDB文件
-├── long_term_memory/    # 长期内存ChromaDB文件
-├── entities/            # 实体内存ChromaDB文件
+├── short_term_memory/   # 短期记忆ChromaDB文件
+├── long_term_memory/    # 长期记忆ChromaDB文件
+├── entities/            # 实体记忆ChromaDB文件
 └── long_term_memory_storage.db  # SQLite数据库
 ```
 
@@ -130,7 +132,7 @@ from crewai import Crew
 # 设置自定义存储位置
 os.environ["CREWAI_STORAGE_DIR"] = "./my_project_storage"
 
-# 所有内存和知识现在将存储在./my_project_storage/中
+# 所有记忆和知识现在将存储在./my_project_storage/中
 crew = Crew(
     agents=[...],
     tasks=[...],
@@ -274,13 +276,13 @@ else:
 ```python  theme={null}
 from crewai import Crew
 
-# 重置所有内存存储
+# 重置所有记忆存储
 crew = Crew(agents=[...], tasks=[...], memory=True)
 
-# 重置特定内存类型
-crew.reset_memories(command_type='short')     # 短期内存
-crew.reset_memories(command_type='long')      # 长期内存
-crew.reset_memories(command_type='entity')    # 实体内存
+# 重置特定记忆类型
+crew.reset_memories(command_type='short')     # 短期记忆
+crew.reset_memories(command_type='long')      # 长期记忆
+crew.reset_memories(command_type='entity')    # 实体记忆
 crew.reset_memories(command_type='knowledge') # 知识存储
 ```
 
@@ -329,7 +331,7 @@ print("计算的存储路径:", db_storage_path())
 
 ## 自定义嵌入器配置
 
-CrewAI支持多个嵌入提供者，让您可以灵活选择最适合您用例的选项。以下是配置内存系统不同嵌入提供者的综合指南。
+CrewAI支持多个嵌入提供者，让您可以灵活选择最适合您用例的选项。以下是配置记忆系统不同嵌入提供者的综合指南。
 
 ### 为什么选择不同的嵌入提供者？
 
@@ -555,7 +557,7 @@ crew = Crew(
 
 ### Mem0提供者
 
-短期内存和实体内存都支持与Mem0 OSS和Mem0 Client作为提供者的紧密集成。以下是如何使用Mem0作为提供者。
+短期记忆和实体记忆都支持与Mem0 OSS和Mem0 Client作为提供者的紧密集成。以下是如何使用Mem0作为提供者。
 
 ```python  theme={null}
 from crewai.memory.short_term.short_term_memory import ShortTermMemory
@@ -582,19 +584,19 @@ mem0_client_embedder_config = {
             "org_id": "my_org_id",        # 可选
             "project_id": "my_project_id", # 可选
             "api_key": "custom-api-key"    # 可选 - 覆盖环境变量
-            "run_id": "my_run_id",        # 可选 - 用于短期内存
+            "run_id": "my_run_id",        # 可选 - 用于短期记忆
             "includes": "include1",       # 可选 
             "excludes": "exclude1",       # 可选
             "infer": True                 # 可选，默认为True
-            "custom_categories": new_categories  # 可选 - 用户内存的自定义类别
+            "custom_categories": new_categories  # 可选 - 用户记忆的自定义类别
         },
     }
 
 
-short_term_memory_mem0_oss = ShortTermMemory(embedder_config=mem0_oss_embedder_config) # 使用Mem0 OSS的短期内存
-short_term_memory_mem0_client = ShortTermMemory(embedder_config=mem0_client_embedder_config) # 使用Mem0 Client的短期内存
-entity_memory_mem0_oss = EntityMemory(embedder_config=mem0_oss_embedder_config) # 使用Mem0 OSS的实体内存
-entity_memory_mem0_client = EntityMemory(embedder_config=mem0_client_embedder_config) # 使用Mem0 Client的短期内存
+short_term_memory_mem0_oss = ShortTermMemory(embedder_config=mem0_oss_embedder_config) # 使用Mem0 OSS的短期记忆
+short_term_memory_mem0_client = ShortTermMemory(embedder_config=mem0_client_embedder_config) # 使用Mem0 Client的短期记忆
+entity_memory_mem0_oss = EntityMemory(embedder_config=mem0_oss_embedder_config) # 使用Mem0 OSS的实体记忆
+entity_memory_mem0_client = EntityMemory(embedder_config=mem0_client_embedder_config) # 使用Mem0 Client的短期记忆
 
 crew = Crew(
     memory=True,
@@ -733,7 +735,7 @@ def test_embedding_performance(embedder_config, test_text="This is a test docume
         embedder=embedder_config
     )
 
-    # 模拟内存操作
+    # 模拟记忆操作
     crew.kickoff()
 
     end_time = time.time()
@@ -754,9 +756,9 @@ print(f"OpenAI: {openai_time:.2f}秒")
 print(f"Ollama: {ollama_time:.2f}秒")
 ```
 
-### 实体内存批处理行为
+### 实体记忆批处理行为
 
-实体内存在一次保存多个实体时支持批处理。当您传递`EntityMemoryItem`列表时，系统：
+实体记忆在一次保存多个实体时支持批处理。当您传递`EntityMemoryItem`列表时，系统：
 
 * 发出一个带有`entity_count`的MemorySaveStartedEvent
 * 在内部保存每个实体，收集任何部分错误
@@ -765,18 +767,18 @@ print(f"Ollama: {ollama_time:.2f}秒")
 
 这在一次操作中写入许多实体时提高了性能和可观察性。
 
-## 2. 外部内存
+## 2. 外部记忆
 
-外部内存提供了一个独立于团队内置内存的独立内存系统。这适用于专门的内存提供者或跨应用程序内存共享。
+外部记忆提供了一个独立于团队内置记忆的独立记忆系统。这适用于专门的记忆提供者或跨应用程序记忆共享。
 
-### 使用Mem0的基本外部内存
+### 使用Mem0的基本外部记忆
 
 ```python  theme={null}
 import os
 from crewai import Agent, Crew, Process, Task
 from crewai.memory.external.external_memory import ExternalMemory
 
-# 创建具有本地Mem0配置的外部内存实例
+# 创建具有本地Mem0配置的外部记忆实例
 external_memory = ExternalMemory(
     embedder_config={
         "provider": "mem0",
@@ -804,15 +806,15 @@ external_memory = ExternalMemory(
 crew = Crew(
     agents=[...],
     tasks=[...],
-    external_memory=external_memory, # 与基本内存分离
+    external_memory=external_memory, # 与基本记忆分离
     process=Process.sequential,
     verbose=True
 )
 ```
 
-### 使用Mem0 Client的高级外部内存
+### 使用Mem0 Client的高级外部记忆
 
-使用Mem0 Client时，您可以通过使用'includes'、'excludes'、'custom_categories'、'infer'和'run_id'（仅用于短期内存）等参数进一步自定义内存配置。
+使用Mem0 Client时，您可以通过使用'includes'、'excludes'、'custom_categories'、'infer'和'run_id'（仅用于短期记忆）等参数进一步自定义记忆配置。
 您可以在[Mem0文档](https://docs.mem0.ai/)中找到更多详细信息。
 
 ```python  theme={null}
@@ -828,7 +830,7 @@ new_categories = [
 
 os.environ["MEM0_API_KEY"] = "your-api-key"
 
-# 创建具有Mem0 Client的外部内存实例
+# 创建具有Mem0 Client的外部记忆实例
 external_memory = ExternalMemory(
     embedder_config={
         "provider": "mem0",
@@ -837,11 +839,11 @@ external_memory = ExternalMemory(
             "org_id": "my_org_id",        # 可选
             "project_id": "my_project_id", # 可选
             "api_key": "custom-api-key"    # 可选 - 覆盖环境变量
-            "run_id": "my_run_id",        # 可选 - 用于短期内存
+            "run_id": "my_run_id",        # 可选 - 用于短期记忆
             "includes": "include1",       # 可选 
             "excludes": "exclude1",       # 可选
             "infer": True                 # 可选，默认为True
-            "custom_categories": new_categories  # 可选 - 用户内存的自定义类别
+            "custom_categories": new_categories  # 可选 - 用户记忆的自定义类别
         },
     }
 )
@@ -849,7 +851,7 @@ external_memory = ExternalMemory(
 crew = Crew(
     agents=[...],
     tasks=[...],
-    external_memory=external_memory, # 与基本内存分离
+    external_memory=external_memory, # 与基本记忆分离
     process=Process.sequential,
     verbose=True
 )
@@ -889,15 +891,15 @@ crew = Crew(
 )
 ```
 
-## 🧠 内存系统比较
+## 🧠 记忆系统比较
 
-| **类别** | **功能** | **基本内存** | **外部内存** |
+| **类别** | **功能** | **基本记忆** | **外部记忆** |
 | --- | --- | --- | --- |
 | **易用性** | 设置复杂度 | 简单 | 中等 |
 | | 集成 | 内置（上下文相关） | 独立 |
 | **持久性** | 存储 | 本地文件 | 自定义 / Mem0 |
 | | 跨会话支持 | ✅ | ✅ |
-| **个性化** | 用户特定内存 | ❌ | ✅ |
+| **个性化** | 用户特定记忆 | ❌ | ✅ |
 | | 自定义提供者 | 有限 | 任何提供者 |
 | **用例适配** | 推荐用于 | 大多数通用用例 | 专门 / 自定义需求 |
 
@@ -1023,11 +1025,11 @@ crew = Crew(
 
 ### 常见问题
 
-**内存在会话之间没有持久化？**
+**记忆在会话之间没有持久化？**
 
 * 检查`CREWAI_STORAGE_DIR`环境变量
 * 确保对存储目录有写权限
-* 验证内存已启用`memory=True`
+* 验证记忆已启用`memory=True`
 
 **Mem0身份验证错误？**
 
@@ -1035,50 +1037,50 @@ crew = Crew(
 * 在Mem0仪表板上检查API密钥权限
 * 确保已安装`mem0ai`包
 
-**大型数据集的高内存使用量？**
+**大型数据集的高记忆使用量？**
 
-* 考虑使用带有自定义存储的外部内存
+* 考虑使用带有自定义存储的外部记忆
 * 在自定义存储搜索方法中实现分页
-* 使用较小的嵌入模型以减少内存占用
+* 使用较小的嵌入模型以减少记忆占用
 
 ### 性能技巧
 
 * 对大多数用例使用`memory=True`（最简单和最快）
-* 仅在需要用户特定持久化时使用用户内存
-* 对于大规模或专门需求，考虑外部内存
+* 仅在需要用户特定持久化时使用用户记忆
+* 对于大规模或专门需求，考虑外部记忆
 * 选择较小的嵌入模型以加快处理速度
-* 设置适当的搜索限制以控制内存检索大小
+* 设置适当的搜索限制以控制记忆检索大小
 
-## 使用CrewAI内存系统的好处
+## 使用CrewAI记忆系统的好处
 
 * 🦾 **自适应学习**：团队随着时间的推移变得更加高效，适应新信息并完善其任务处理方法。
-* 🫡 **增强个性化**：内存使代理能够记住用户偏好和历史交互，从而提供个性化体验。
-* 🧠 **改进问题解决**：访问丰富的内存存储有助于代理做出更明智的决策，利用过去的学习和上下文见解。
+* 🫡 **增强个性化**：记忆使Agent能够记住用户偏好和历史交互，从而提供个性化体验。
+* 🧠 **改进问题解决**：访问丰富的记忆存储有助于Agent做出更明智的决策，利用过去的学习和上下文见解。
 
-## 内存事件
+## 记忆事件
 
-CrewAI的事件系统提供了对内存操作的强大洞察力。通过利用内存事件，您可以监控、调试和优化内存系统的性能和行为。
+CrewAI的事件系统提供了对记忆操作的强大洞察力。通过利用记忆事件，您可以监控、调试和优化记忆系统的性能和行为。
 
-### 可用的内存事件
+### 可用的记忆事件
 
-CrewAI发出以下与内存相关的事件：
+CrewAI发出以下与记忆相关的事件：
 
 | 事件 | 描述 | 关键属性 |
 | :--- | :--- | :--- |
-| **MemoryQueryStartedEvent** | 内存查询开始时发出 | `query`, `limit`, `score_threshold` |
-| **MemoryQueryCompletedEvent** | 内存查询成功完成时发出 | `query`, `results`, `limit`, `score_threshold`, `query_time_ms` |
-| **MemoryQueryFailedEvent** | 内存查询失败时发出 | `query`, `limit`, `score_threshold`, `error` |
-| **MemorySaveStartedEvent** | 内存保存操作开始时发出 | `value`, `metadata`, `agent_role` |
-| **MemorySaveCompletedEvent** | 内存保存操作成功完成时发出 | `value`, `metadata`, `agent_role`, `save_time_ms` |
-| **MemorySaveFailedEvent** | 内存保存操作失败时发出 | `value`, `metadata`, `agent_role`, `error` |
-| **MemoryRetrievalStartedEvent** | 任务提示的内存检索开始时发出 | `task_id` |
-| **MemoryRetrievalCompletedEvent** | 内存检索成功完成时发出 | `task_id`, `memory_content`, `retrieval_time_ms` |
+| **MemoryQueryStartedEvent** | 记忆查询开始时发出 | `query`, `limit`, `score_threshold` |
+| **MemoryQueryCompletedEvent** | 记忆查询成功完成时发出 | `query`, `results`, `limit`, `score_threshold`, `query_time_ms` |
+| **MemoryQueryFailedEvent** | 记忆查询失败时发出 | `query`, `limit`, `score_threshold`, `error` |
+| **MemorySaveStartedEvent** | 记忆保存操作开始时发出 | `value`, `metadata`, `agent_role` |
+| **MemorySaveCompletedEvent** | 记忆保存操作成功完成时发出 | `value`, `metadata`, `agent_role`, `save_time_ms` |
+| **MemorySaveFailedEvent** | 记忆保存操作失败时发出 | `value`, `metadata`, `agent_role`, `error` |
+| **MemoryRetrievalStartedEvent** | 任务提示的记忆检索开始时发出 | `task_id` |
+| **MemoryRetrievalCompletedEvent** | 记忆检索成功完成时发出 | `task_id`, `memory_content`, `retrieval_time_ms` |
 
 ### 实际应用
 
-#### 1. 内存性能监控
+#### 1. 记忆性能监控
 
-跟踪内存操作时间以优化您的应用程序：
+跟踪记忆操作时间以优化您的应用程序：
 
 ```python  theme={null}
 from crewai.events import (
@@ -1098,22 +1100,22 @@ class MemoryPerformanceMonitor(BaseEventListener):
         @crewai_event_bus.on(MemoryQueryCompletedEvent)
         def on_memory_query_completed(source, event: MemoryQueryCompletedEvent):
             self.query_times.append(event.query_time_ms)
-            print(f"内存查询在{event.query_time_ms:.2f}毫秒内完成。查询: '{event.query}'")
+            print(f"记忆查询在{event.query_time_ms:.2f}毫秒内完成。查询: '{event.query}'")
             print(f"平均查询时间: {sum(self.query_times)/len(self.query_times):.2f}毫秒")
 
         @crewai_event_bus.on(MemorySaveCompletedEvent)
         def on_memory_save_completed(source, event: MemorySaveCompletedEvent):
             self.save_times.append(event.save_time_ms)
-            print(f"内存保存在{event.save_time_ms:.2f}毫秒内完成")
+            print(f"记忆保存在{event.save_time_ms:.2f}毫秒内完成")
             print(f"平均保存时间: {sum(self.save_times)/len(self.save_times):.2f}毫秒")
 
 # 创建您的监听器实例
 memory_monitor = MemoryPerformanceMonitor()
 ```
 
-#### 2. 内存内容日志记录
+#### 2. 记忆内容日志记录
 
-记录内存操作以进行调试和洞察：
+记录记忆操作以进行调试和洞察：
 
 ```python  theme={null}
 from crewai.events import (
@@ -1132,21 +1134,21 @@ class MemoryLogger(BaseEventListener):
         @crewai_event_bus.on(MemorySaveStartedEvent)
         def on_memory_save_started(source, event: MemorySaveStartedEvent):
             if event.agent_role:
-                logger.info(f"代理 '{event.agent_role}' 正在保存内存: {event.value[:50]}...")
+                logger.info(f"Agent '{event.agent_role}' 正在保存记忆: {event.value[:50]}...")
             else:
-                logger.info(f"正在保存内存: {event.value[:50]}...")
+                logger.info(f"正在保存记忆: {event.value[:50]}...")
 
         @crewai_event_bus.on(MemoryQueryStartedEvent)
         def on_memory_query_started(source, event: MemoryQueryStartedEvent):
-            logger.info(f"内存查询开始: '{event.query}' (限制: {event.limit})")
+            logger.info(f"记忆查询开始: '{event.query}' (限制: {event.limit})")
 
         @crewai_event_bus.on(MemoryRetrievalCompletedEvent)
         def on_memory_retrieval_completed(source, event: MemoryRetrievalCompletedEvent):
             if event.task_id:
-                logger.info(f"为任务{event.task_id}检索的内存在{event.retrieval_time_ms:.2f}毫秒内完成")
+                logger.info(f"为任务{event.task_id}检索的记忆在{event.retrieval_time_ms:.2f}毫秒内完成")
             else:
-                logger.info(f"内存检索在{event.retrieval_time_ms:.2f}毫秒内完成")
-            logger.debug(f"内存内容: {event.memory_content}")
+                logger.info(f"记忆检索在{event.retrieval_time_ms:.2f}毫秒内完成")
+            logger.debug(f"记忆内容: {event.memory_content}")
 
 # 创建您的监听器实例
 memory_logger = MemoryLogger()
@@ -1154,7 +1156,7 @@ memory_logger = MemoryLogger()
 
 #### 3. 错误跟踪和通知
 
-捕获并响应内存错误：
+捕获并响应记忆错误：
 
 ```python  theme={null}
 from crewai.events import (
@@ -1178,8 +1180,8 @@ class MemoryErrorTracker(BaseEventListener):
         @crewai_event_bus.on(MemorySaveFailedEvent)
         def on_memory_save_failed(source, event: MemorySaveFailedEvent):
             self.error_count += 1
-            agent_info = f"代理 '{event.agent_role}'" if event.agent_role else "未知代理"
-            error_message = f"内存保存失败: {event.error}。{agent_info}"
+            agent_info = f"Agent '{event.agent_role}'" if event.agent_role else "未知Agent"
+            error_message = f"记忆保存失败: {event.error}。{agent_info}"
             logger.error(error_message)
 
             if self.notify_email and self.error_count % 5 == 0:
@@ -1188,7 +1190,7 @@ class MemoryErrorTracker(BaseEventListener):
         @crewai_event_bus.on(MemoryQueryFailedEvent)
         def on_memory_query_failed(source, event: MemoryQueryFailedEvent):
             self.error_count += 1
-            error_message = f"内存查询失败: {event.error}。查询: '{event.query}'"
+            error_message = f"记忆查询失败: {event.error}。查询: '{event.query}'"
             logger.error(error_message)
 
             if self.notify_email and self.error_count % 5 == 0:
@@ -1204,7 +1206,7 @@ error_tracker = MemoryErrorTracker(notify_email="admin@example.com")
 
 ### 与分析平台集成
 
-内存事件可以转发到分析和监控平台，以跟踪性能指标、检测异常和可视化内存使用模式：
+记忆事件可以转发到分析和监控平台，以跟踪性能指标、检测异常和可视化记忆使用模式：
 
 ```python  theme={null}
 from crewai.events import (
@@ -1241,15 +1243,15 @@ class MemoryAnalyticsForwarder(BaseEventListener):
             })
 ```
 
-### 内存事件监听器的最佳实践
+### 记忆事件监听器的最佳实践
 
 1. **保持处理器轻量级**：避免在事件处理器中进行复杂处理，以防性能影响
 2. **使用适当的日志级别**：正常操作使用INFO，详细信息使用DEBUG，问题使用ERROR
 3. **尽可能批量处理指标**：在发送到外部系统之前累积指标
 4. **优雅地处理异常**：确保您的事件处理器不会因意外数据而崩溃
-5. **考虑内存消耗**：注意存储大量事件数据
+5. **考虑记忆消耗**：注意存储大量事件数据
 
 ## 结论
 
-将CrewAI的内存系统集成到您的项目中非常简单。通过利用提供的内存组件和配置，
-您可以快速为您的代理提供记忆、推理和从交互中学习的能力，从而解锁新的智能和能力水平。
+将CrewAI的记忆系统集成到您的项目中非常简单。通过利用提供的记忆组件和配置，
+您可以快速为您的Agent提供记忆、推理和从交互中学习的能力，从而解锁新的智能和能力水平。
