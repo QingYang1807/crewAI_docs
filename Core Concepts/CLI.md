@@ -410,14 +410,10 @@ crewai config set oauth2_domain my-company.auth0.com
 crewai config reset
 ```
 
-<Tip>
-  重置配置后，重新运行 `crewai login` 以再次进行身份验证。
-</Tip>
+重置配置后，重新运行`crewai login`以再次进行身份验证。
 
-<Tip>
-  CrewAI CLI 在向项目添加包时自动处理向工具存储库的身份验证。只需在任何 `uv` 命令前附加 `crewai` 即可使用它。例如 `crewai uv add requests`。有关更多信息，请参阅 [工具存储库](https://docs.crewai.com/enterprise/features/tool-repository) 文档。
-</Tip>
 
-<Note>
-  配置设置存储在 `~/.config/crewai/settings.json` 中。某些设置（如组织名称和 UUID）是只读的，通过身份验证和组织命令进行管理。与工具存储库相关的设置是隐藏的，不能由用户直接设置。
-</Note>
+CrewAI CLI 在向项目添加包时自动处理向工具存储库的身份验证。只需在任何 `uv` 命令前附加 `crewai` 即可使用它。例如 `crewai uv add requests`。有关更多信息，请参阅 [工具存储库](https://docs.crewai.com/enterprise/features/tool-repository) 文档。
+
+
+配置设置存储在 `~/.config/crewai/settings.json` 中。某些设置（如组织名称和 UUID）是只读的，通过身份验证和组织命令进行管理。与工具存储库相关的设置是隐藏的，不能由用户直接设置。
