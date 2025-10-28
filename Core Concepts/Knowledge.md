@@ -98,9 +98,7 @@ result = crew.kickoff(inputs={"question": "John 住在哪个城市，他多大�
 
 ### 网页内容知识示例
 
-<Note>
-  要使以下示例工作，您需要安装 `docling`：`uv add docling`
-</Note>
+要使以下示例工作，您需要安装 `docling`：`uv add docling`
 
 ```python
 from crewai import LLM, Agent, Crew, Process, Task
@@ -214,9 +212,7 @@ json_source = JSONKnowledgeSource(
 )
 ```
 
-<Note>
-  请确保您创建了 ./knowledge 文件夹。所有源文件（如 .txt、.pdf、.xlsx、.json）都应放置在此文件夹中以进行集中管理。
-</Note>
+请确保您创建了 ./knowledge 文件夹。所有源文件（如 .txt、.pdf、.xlsx、.json）都应放置在此文件夹中以进行集中管理。
 
 ## 智能体与团队知识：完整指南
 
