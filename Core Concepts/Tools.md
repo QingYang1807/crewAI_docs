@@ -13,16 +13,13 @@ CrewAI 中的工具是智能体可以用来执行各种操作的技能或功能�
 这包括来自 [CrewAI 工具包](https://github.com/joaomdmoura/crewai-tools) 和 [LangChain 工具](https://python.langchain.com/docs/integrations/tools) 的工具，
 支持从简单搜索到复杂交互以及智能体间有效团队合作的所有功能。
 
-<Note type="info" title="企业增强版：工具库">
-  CrewAI AMP 提供了一个全面的工具库，包含常见业务系统和 API 的预构建集成。在几分钟而不是几天内部署配备企业工具的智能体。
+CrewAI AMP 提供了一个全面的工具库，包含常见业务系统和 API 的预构建集成。在几分钟而不是几天内部署配备企业工具的智能体。
 
-  企业工具库包括：
-
-  * 流行的企业系统预构建连接器
-  * 自定义工具创建界面
-  * 版本控制和共享功能
-  * 安全和合规特性
-</Note>
+企业工具库包括：
+* 流行的企业系统预构建连接器
+* 自定义工具创建界面
+* 版本控制和共享功能
+* 安全和合规特性
 
 ## 工具的关键特性
 
@@ -37,13 +34,13 @@ CrewAI 中的工具是智能体可以用来执行各种操作的技能或功能�
 
 要使用 crewAI 工具增强您的智能体能力，首先安装我们的额外工具包：
 
-```bash  theme={null}
+```bash
 pip install 'crewai[tools]'
 ```
 
 以下是使用示例：
 
-```python Code theme={null}
+```python
 import os
 from crewai import Agent, Task, Crew
 # 导入 crewAI 工具
@@ -150,16 +147,13 @@ crew.kickoff()
 
 ## 创建自己的工具
 
-<Tip>
-  开发人员可以为其智能体需求定制 `自定义工具` 或
-  利用预构建选项。
-</Tip>
+开发人员可以为其智能体需求定制 `自定义工具` 或利用预构建选项。
 
 创建 CrewAI 工具主要有两种方式：
 
 ### 继承 `BaseTool`
 
-```python Code theme={null}
+```python
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 
@@ -187,7 +181,7 @@ CrewAI 支持异步工具，允许您实现执行非阻塞操作的工具，如�
 
 #### 1. 使用 `tool` 装饰器与异步函数
 
-```python Code theme={null}
+```python
 from crewai.tools import tool
 
 @tool("fetch_data_async")
@@ -200,7 +194,7 @@ async def fetch_data_async(query: str) -> str:
 
 #### 2. 在自定义工具类中实现异步方法
 
-```python Code theme={null}
+```python
 from crewai.tools import BaseTool
 
 class AsyncCustomTool(BaseTool):
@@ -218,7 +212,7 @@ class AsyncCustomTool(BaseTool):
 
 异步工具在标准 Crew 工作流程和基于 Flow 的工作流程中都能无缝工作：
 
-```python Code theme={null}
+```python
 # 在标准 Crew 中
 agent = Agent(role="researcher", tools=[async_custom_tool])
 
@@ -235,7 +229,7 @@ CrewAI 框架自动处理同步和异步工具的执行，因此您无需担心�
 
 ### 利用 `tool` 装饰器
 
-```python Code theme={null}
+```python
 from crewai.tools import tool
 @tool("我的工具名称")
 def my_tool(question: str) -> str:
@@ -246,13 +240,10 @@ def my_tool(question: str) -> str:
 
 ### 自定义缓存机制
 
-<Tip>
-  工具可以选择实现 `cache_function` 来微调缓存
-  行为。此函数根据特定条件确定何时缓存结果，
-  提供对缓存逻辑的细粒度控制。
-</Tip>
 
-```python Code theme={null}
+工具可以选择实现 `cache_function` 来微调缓存行为。此函数根据特定条件确定何时缓存结果，提供对缓存逻辑的细粒度控制。
+
+```python
 from crewai.tools import tool
 
 @tool
