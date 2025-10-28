@@ -10,7 +10,7 @@ Agent推理是一项允许Agent在执行任务前对任务进行反思并创建�
 
 要为Agent启用推理，只需在创建Agent时设置 `reasoning=True`：
 
-```python  theme={null}
+```python
 from crewai import Agent
 
 agent = Agent(
@@ -47,7 +47,7 @@ agent = Agent(
 
 这是一个完整的示例：
 
-```python  theme={null}
+```python
 from crewai import Agent, Task, Crew
 
 # 创建一个启用了推理的Agent
@@ -79,7 +79,7 @@ print(result)
 
 以下是如何在代码中处理潜在错误：
 
-```python  theme={null}
+```python
 from crewai import Agent, Task
 import logging
 
