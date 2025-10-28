@@ -26,9 +26,9 @@
   </div>
 
   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
-    <a className="button button-primary" href="/en/quickstart">开始使用</a>
-    <a className="button" href="/en/changelog">查看更新日志</a>
-    <a className="button" href="/en/api-reference/introduction">API 参考</a>
+    <a className="button button-primary" href="/Get Started/Quickstart.md">开始使用</a>
+    <a className="button" href="/Changelog/Changelog.md">查看更新日志</a>
+    <a className="button" href="/API Reference/Introduction.md">API 参考</a>
   </div>
 </div>
 
@@ -95,7 +95,7 @@
 </CardGroup>
 
 <Callout title="探索真实世界模式" icon="github">
-  浏览<a href="/en/examples/cookbooks">示例和食谱</a>，获取涵盖智能体、工作流和企业自动化的端到端参考实现。
+  浏览<a href="https://docs.crewai.com/en/examples/cookbooks">示例和食谱</a>，获取涵盖智能体、工作流和企业自动化的端到端参考实现。
 </Callout>
 
 ## 保持联系
